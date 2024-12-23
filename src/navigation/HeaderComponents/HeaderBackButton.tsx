@@ -8,10 +8,9 @@ export const HeaderBackButton = (props: HeaderBackButtonProps) => {
   const navigation = useNavigation();
 
   return (
-    // pr comment if you're using a prop that isnt as standard to use for no apparent reason,
-    //  i would recommend leaving a comment with a link to someone else experiencing the issue
-    //  where pressability is shotty with TouchableOpacity's onPress prop so it doesn't get changed in the future
-    // and reintroduce a bug
+    //  For some reason, on physical devices, onPress does not work for the navigation in this case.
+    //  I'm using onPressIn for now until we figure out why it doesn't work.
+
     <TouchableOpacity onPressIn={() => (props.canGoBack ? navigation.goBack() : null)}>
       <FontAwesome5 name="home" style={styles.backButton} size={38} />
     </TouchableOpacity>

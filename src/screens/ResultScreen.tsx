@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {MainStackScreenProps} from '../navigation/types/navigation.types';
 import {LinearGradient} from 'react-native-gradients';
 import {CurrentBox} from '../components/CurrentBox';
 import {ActivityIndicator} from 'react-native';
+import {LoadingStatuses} from '../utilities/useWeatherFetch';
 
 // #region Weather Fetch Logic
 const weatherFetch = async (cityName: string) => {
@@ -31,15 +32,16 @@ const weatherFetch = async (cityName: string) => {
 };
 // #endregion Weather Fetch Logic
 
-const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
+export const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
   const [weather, setWeather] = useState<any | null>(null);
-  // pr comment
-  // you've got a LoadingStatuses enum in useWeatherFetch, I would hook that up here and then
-  // do setLoadingStatus(LoadingStatuses.Foo) instead of setLoadingStatuses('Foo') to get some of the benefits of
-  // enums we talked about
-  const [loadingStatus, setLoadingStatus] = useState<'Idle' | 'Loading' | 'Fulfilled' | 'Rejected'>(
-    'Idle',
-  );
+
+  const [loadingStatus, setLoadingStatus] = useState<
+    | LoadingStatuses.Idle
+    | LoadingStatuses.Loading
+    | LoadingStatuses.Fulfilled
+    | LoadingStatuses.Rejected
+  >(LoadingStatuses.Idle);
+
   const [weatherFetchError, setWeatherFetchError] = useState<string | null>(null);
 
   const searchTerm = route.params?.searchTerm ?? '';
@@ -59,27 +61,25 @@ const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
 
   const formattedSearchTerm = country && city ? `${city}, ${country}` : city;
 
-  useEffect(() => {
-    // pr comment
-    //I would pull anything async out of a use effect, move it to a callback and then place your
-    //  if (searchTerm) line around where you call it in the useEffect so it doesn't even try to run if theres no search term
-    const fetchWeatherData = async () => {
-      if (searchTerm) {
-        setLoadingStatus('Loading');
-        const {weather, error} = await weatherFetch(searchTerm);
-
-        if (error) {
-          setWeatherFetchError(error);
-          setLoadingStatus('Rejected');
-        } else {
-          setWeather(weather);
-          setLoadingStatus('Fulfilled');
-        }
+  const fetchWeatherData = useCallback(async () => {
+    try {
+      const {weather, error} = await weatherFetch(searchTerm);
+      if (error) {
+        throw new Error(error);
       }
-    };
-
-    fetchWeatherData();
+      setWeather(weather);
+      setLoadingStatus(LoadingStatuses.Fulfilled);
+    } catch (error) {
+      setWeatherFetchError('An unknown error occurred');
+      setLoadingStatus(LoadingStatuses.Rejected);
+    }
   }, [searchTerm]);
+
+  useEffect(() => {
+    if (searchTerm) {
+      fetchWeatherData();
+    }
+  }, [searchTerm, fetchWeatherData]);
 
   return (
     <>
@@ -174,6 +174,3 @@ const gradientColors = [
   {offset: '0%', color: '#0F0E2C', opacity: '1'},
   {offset: '100%', color: '#202b70', opacity: '1'},
 ];
-
-// pr comment i would change all these to named
-export default ResultScreen;

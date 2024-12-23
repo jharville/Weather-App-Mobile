@@ -1,5 +1,5 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import ResultScreen from '../screens/ResultScreen';
+import {ResultScreen} from '../screens/ResultScreen';
 import {MainStackParamList} from './types/navigation.types';
 import {NativeStackNavigationOptions} from '@react-navigation/native-stack';
 import {HeaderBackButton} from './HeaderComponents/HeaderBackButton';

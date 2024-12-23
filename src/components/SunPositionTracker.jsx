@@ -23,23 +23,9 @@ const sunStyle = {
 };
 
 const isoToMinutes = isoString => {
-  ////////////////////////////////////////////
-  // pr comment
-  // original
-  // if (!isoString) {
-  //   return 0;
-  // }
-
-  // suggestion
   if (!isoString) {
     return null;
   }
-  // reason:
-  // Returning 0 here does the same thing as null, but null is more obvious that
-  // it's supposed to be a falsy value to me.
-  // When I see return 0 or -1, I assume there is x === 0 or x === -1 checks
-  // happening later.
-  ////////////////////////////////////////////
   const date = parseISO(isoString);
   return date.getHours() * 60 + date.getMinutes();
 };

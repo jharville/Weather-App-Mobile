@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from 'react-native';
-import {getWeatherIcon, getWeatherLabel} from '../getWeatherStatus';
-import {SunPositionTracker} from '../SunPositionTracker';
+import {getWeatherIcon, getWeatherLabel} from '../utilities/getWeatherStatus';
+import {SunPositionTracker} from './SunPositionTracker';
 import {format, parseISO, addMinutes} from 'date-fns';
 import {useEffect, useState} from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
