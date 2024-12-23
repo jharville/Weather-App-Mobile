@@ -1,0 +1,11 @@
+pr comment
+
+1. I would move the following files to a utils folder
+
+https://github.com/jharville/Weather-App-Mobile/blob/843bcfdbd58676a5a3efe044f60ded05a478621d/src/getWeatherStatus.tsx
+
+https://github.com/jharville/Weather-App-Mobile/blob/843bcfdbd58676a5a3efe044f60ded05a478621d/src/useWeatherFetch.tsx
+
+2. I would move this one inside a components folder
+
+https://github.com/jharville/Weather-App-Mobile/blob/843bcfdbd58676a5a3efe044f60ded05a478621d/src/SunPositionTracker.jsx

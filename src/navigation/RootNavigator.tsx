@@ -1,4 +1,4 @@
-import {createNativeStackNavigator, NativeStackNavigationOptions} from '@react-navigation/native-stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {LandingStack} from './LandingStack';
 import {MainStack} from './MainStack';
 import {RootNavigatorParamList} from './types/navigation.types';

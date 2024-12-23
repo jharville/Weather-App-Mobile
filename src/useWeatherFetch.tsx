@@ -1,12 +1,5 @@
 import {useState, useCallback} from 'react';
 
-// export const loadingStatuses = {
-//   idle: 'idle',
-//   loading: 'loading',
-//   fulfilled: 'fulfilled',
-//   rejected: 'no Data found',
-// };
-
 /**
  * useWeatherFetch is a custom hook for fetching weather variables from the Open Mateo API.
  * This destructured hook returns the following values:
@@ -56,9 +49,7 @@ export enum LoadingStatuses {
 
 export const useWeatherFetch = () => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
-  const [weatherFetchError, setWeatherFetchError] = useState<string | null>(
-    null,
-  );
+  const [weatherFetchError, setWeatherFetchError] = useState<string | null>(null);
   const [loadingStatus, setLoadingStatus] = useState(LoadingStatuses.Idle);
 
   const fetchWeather = useCallback(async (cityName: string) => {
@@ -96,13 +87,10 @@ export const useWeatherFetch = () => {
       setLoadingStatus(LoadingStatuses.Fulfilled);
     } catch (error) {
       setWeather(null);
-      setWeatherFetchError(
-        'Failed to fetch data. Check your internet connection.',
-      );
+      setWeatherFetchError('Failed to fetch data. Check your internet connection.');
       setLoadingStatus(LoadingStatuses.Rejected);
     }
   }, []);
-  // why was isRejected in the dependancy array?
 
   return {weather, fetchWeather, weatherFetchError, loadingStatus};
 };
