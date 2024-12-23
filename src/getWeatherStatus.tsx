@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -91,7 +91,6 @@ export const getWeatherLabel = (weatherCode: number): WeatherStatuses => {
  * @param {WeatherStatus} status - The weather status string.
  * @returns {JSX.Element} - A React element for the weather icon.
  */
-type WeatherStatus = (typeof WeatherStatuses)[keyof typeof WeatherStatuses];
 
 export const getWeatherIcon = (status: WeatherStatuses) => {
   switch (status) {
@@ -148,7 +147,6 @@ export const getWeatherIcon = (status: WeatherStatuses) => {
     default:
       return (
         <View>
-          <Text>I'm the default</Text>
           <FontAwesome name="sun-o" color="goldenrod" size={75} />
         </View>
       );

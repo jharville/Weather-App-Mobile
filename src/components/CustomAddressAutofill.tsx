@@ -56,19 +56,22 @@ export const CustomAddressAutofill: React.FC<CustomAddressAutofillProps> = ({
     }
   }, [onNotSuggestionSubmit]);
 
-  const renderItem = useCallback(({item, index}: {item: Suggestion; index: number}) => {
-    return (
-      <TouchableOpacity onPress={() => onAcceptedSuggestion?.(item.display_name)}>
-        <Text
-          style={[
-            styles.suggestionText,
-            index !== suggestions.length - 1 ? styles.suggestionDivider : null,
-          ]}>
-          {item.display_name}
-        </Text>
-      </TouchableOpacity>
-    );
-  }, []);
+  const renderItem = useCallback(
+    ({item, index}: {item: Suggestion; index: number}) => {
+      return (
+        <TouchableOpacity onPress={() => onAcceptedSuggestion?.(item.display_name)}>
+          <Text
+            style={[
+              styles.suggestionText,
+              index !== suggestions.length - 1 ? styles.suggestionDivider : null,
+            ]}>
+            {item.display_name}
+          </Text>
+        </TouchableOpacity>
+      );
+    },
+    [onAcceptedSuggestion, suggestions.length],
+  );
 
   return (
     <>

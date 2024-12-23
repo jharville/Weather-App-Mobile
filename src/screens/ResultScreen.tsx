@@ -33,6 +33,10 @@ const weatherFetch = async (cityName: string) => {
 
 const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
   const [weather, setWeather] = useState<any | null>(null);
+  // pr comment
+  // you've got a LoadingStatuses enum in useWeatherFetch, I would hook that up here and then
+  // do setLoadingStatus(LoadingStatuses.Foo) instead of setLoadingStatuses('Foo') to get some of the benefits of
+  // enums we talked about
   const [loadingStatus, setLoadingStatus] = useState<'Idle' | 'Loading' | 'Fulfilled' | 'Rejected'>(
     'Idle',
   );
@@ -56,6 +60,9 @@ const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
   const formattedSearchTerm = country && city ? `${city}, ${country}` : city;
 
   useEffect(() => {
+    // pr comment
+    //I would pull anything async out of a use effect, move it to a callback and then place your
+    //  if (searchTerm) line around where you call it in the useEffect so it doesn't even try to run if theres no search term
     const fetchWeatherData = async () => {
       if (searchTerm) {
         setLoadingStatus('Loading');
@@ -168,4 +175,5 @@ const gradientColors = [
   {offset: '100%', color: '#202b70', opacity: '1'},
 ];
 
+// pr comment i would change all these to named
 export default ResultScreen;

@@ -23,7 +23,23 @@ const sunStyle = {
 };
 
 const isoToMinutes = isoString => {
-  if (!isoString) return 0;
+  ////////////////////////////////////////////
+  // pr comment
+  // original
+  // if (!isoString) {
+  //   return 0;
+  // }
+
+  // suggestion
+  if (!isoString) {
+    return null;
+  }
+  // reason:
+  // Returning 0 here does the same thing as null, but null is more obvious that
+  // it's supposed to be a falsy value to me.
+  // When I see return 0 or -1, I assume there is x === 0 or x === -1 checks
+  // happening later.
+  ////////////////////////////////////////////
   const date = parseISO(isoString);
   return date.getHours() * 60 + date.getMinutes();
 };
@@ -39,6 +55,7 @@ export const SunPositionTracker = ({sunriseTime, sunsetTime, currentTime}) => {
 
   const daylightDuration = sunsetMinutes - sunriseMinutes;
   const elapsedMinutes = currentMinutes - sunriseMinutes;
+
   const progress = Math.max(0, Math.min(elapsedMinutes / daylightDuration, 1));
 
   const angle = -Math.PI / 2 + progress * Math.PI;

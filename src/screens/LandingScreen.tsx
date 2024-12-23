@@ -25,7 +25,7 @@ export const LandingScreen = ({navigation}: LandingStackScreenProps<'LandingScre
         },
       });
     },
-    [userTextInput, navigation],
+    [navigation],
   );
 
   return (
@@ -39,20 +39,35 @@ export const LandingScreen = ({navigation}: LandingStackScreenProps<'LandingScre
         playInBackground={false}
       />
       <View style={styles.appTitleAndSearch}>
+        {/* 
+        pr comment
+        original:
         <View>
           <Text style={[styles.appTitle, styles.textOutline]}>Weather{'\n'}App</Text>
           <Text style={styles.appTitle}>Weather{'\n'}App</Text>
         </View>
-        <View>
-          <View style={styles.searchAndIconContainer}>
-            <SearchCity
-              handleSearch={handleSearch}
-              handleSuggestionClick={handleSuggestionClick}
-              userTextInput={userTextInput}
-              setUserTextInput={setUserTextInput}
-            />
-          </View>
-        </View>
+
+        sugestion:
+        */}
+        <Text style={styles.appTitle}>Weather</Text>
+        <Text style={styles.appTitle}>App</Text>
+        {/* reason:
+        stacking text on top of each other is gernerally not a great practice, because you'll have to use position absolute
+        like you did on one of these. Plus the outline is the same size as they overlayed text here, 
+        so you wont actually get the outlining effect you're looking for. You can try changing it to 
+        pink the old way and you still wont get a pink border.
+
+        Using \n to escape a new line is fine, but is not the norm. Usually just make another text tag unless there's a reason you can
+        */}
+        {/*  */}
+        {/*  */}
+        {/*  */}
+        <SearchCity
+          handleSearch={handleSearch}
+          handleSuggestionClick={handleSuggestionClick}
+          userTextInput={userTextInput}
+          setUserTextInput={setUserTextInput}
+        />
       </View>
     </Pressable>
   );
@@ -64,7 +79,6 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingHorizontal: 40,
   },
-
   videoLanding: {
     flex: 1,
     position: 'absolute',
@@ -74,7 +88,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     zIndex: -99,
   },
-
   contentContainer: {
     borderColor: '#ffffff',
     borderWidth: 5,
@@ -87,7 +100,6 @@ const styles = StyleSheet.create({
   appTitleAndSearch: {
     gap: 15,
   },
-
   linearGradiantStyle: {
     position: 'absolute',
     top: 0,
@@ -95,17 +107,6 @@ const styles = StyleSheet.create({
     left: 0,
     bottom: 0,
   },
-
-  searchAndIconContainer: {
-    // flexDirection: 'row',
-    // height: 100,
-    // minHeight: 3,x
-    // alignItems: 'center',
-    // borderRadius: 10,
-    // justifyContent: 'center',
-    // paddingHorizontal: 20,
-  },
-
   appTitle: {
     flexDirection: 'column',
     fontSize: 65,
@@ -116,7 +117,6 @@ const styles = StyleSheet.create({
     textShadowOffset: {width: 0, height: 0},
     textShadowRadius: 20,
   },
-
   textOutline: {
     fontSize: 65,
     fontWeight: 'bold',
@@ -126,18 +126,7 @@ const styles = StyleSheet.create({
     left: 1,
     top: 1,
   },
-
   errorMessage: {
     color: 'red',
   },
 });
-
-// import {LinearGradient} from 'react-native-gradients';
-// const gradiantColorList = [
-//   {offset: '8%', color: '#768087', opacity: '1'},
-//   {offset: '100%', color: '#3274a6', opacity: '1'},
-// ];
-
-// <View style={styles.linearGradiantStyle}>
-// {/* <LinearGradient colorList={gradiantColorList} angle={90} /> */}
-// </View>

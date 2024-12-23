@@ -4,12 +4,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 export const HeaderCalendarButton = (props: HeaderCalendarButtonProps) => {
   return (
-    <TouchableOpacity
-      // onPress={() => (props.canGoBack ? navigation.goBack() : null)}
-      onPressIn={() => null}
-      // onPressOut={() => (props.canGoBack ? navigation.goBack() : null)}
-      // hitSlop={{top: 30, bottom: 30, left: 30, right: 30}}>
-    >
+    <TouchableOpacity onPressIn={() => null}>
       <FontAwesome name="calendar" size={30} color="white" style={styles.calendarButton} />
     </TouchableOpacity>
   );
