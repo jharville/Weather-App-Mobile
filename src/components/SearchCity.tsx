@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {TextInput, View, TouchableOpacity, StyleSheet} from 'react-native';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
 import {CustomAddressAutofill} from './CustomAddressAutofill';
@@ -16,6 +16,14 @@ export const SearchCity: React.FC<SearchCityProps> = ({
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
+  const setFocusStateTrue = useCallback(() => {
+    setIsFocused(true);
+  }, []);
+
+  const setFocusStateFalse = useCallback(() => {
+    setIsFocused(false);
+  }, []);
+
   return (
     <>
       <View style={styles.searchbarAndAutofill}>
@@ -29,9 +37,8 @@ export const SearchCity: React.FC<SearchCityProps> = ({
                 onChangeText={setUserTextInput}
                 spellCheck={true}
                 placeholder="Search"
-                // pr comment these can be pulled out to callbacks
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
+                onFocus={setFocusStateTrue}
+                onBlur={setFocusStateFalse}
                 placeholderTextColor="rgba(255, 255, 255, 0.7)"
                 numberOfLines={1}
                 onSubmitEditing={handleSearch}

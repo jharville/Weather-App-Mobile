@@ -38,30 +38,13 @@ export const LandingScreen = ({navigation}: LandingStackScreenProps<'LandingScre
         muted
         playInBackground={false}
       />
+
       <View style={styles.appTitleAndSearch}>
-        {/* 
-        pr comment
-        original:
         <View>
-          <Text style={[styles.appTitle, styles.textOutline]}>Weather{'\n'}App</Text>
-          <Text style={styles.appTitle}>Weather{'\n'}App</Text>
+          <Text style={styles.appTitle}>Weather</Text>
+          <Text style={styles.appTitle}>App</Text>
         </View>
 
-        sugestion:
-        */}
-        <Text style={styles.appTitle}>Weather</Text>
-        <Text style={styles.appTitle}>App</Text>
-        {/* reason:
-        stacking text on top of each other is gernerally not a great practice, because you'll have to use position absolute
-        like you did on one of these. Plus the outline is the same size as they overlayed text here, 
-        so you wont actually get the outlining effect you're looking for. You can try changing it to 
-        pink the old way and you still wont get a pink border.
-
-        Using \n to escape a new line is fine, but is not the norm. Usually just make another text tag unless there's a reason you can
-        */}
-        {/*  */}
-        {/*  */}
-        {/*  */}
         <SearchCity
           handleSearch={handleSearch}
           handleSuggestionClick={handleSuggestionClick}
@@ -88,31 +71,19 @@ const styles = StyleSheet.create({
     bottom: 0,
     zIndex: -99,
   },
-  contentContainer: {
-    borderColor: '#ffffff',
-    borderWidth: 5,
-    borderRadius: 10,
-    gap: 30,
-    paddingVertical: 30,
-    overflow: 'hidden',
-    paddingBottom: 50,
-  },
+
   appTitleAndSearch: {
+    // backgroundColor: 'teal',
     gap: 15,
   },
-  linearGradiantStyle: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    left: 0,
-    bottom: 0,
-  },
+
   appTitle: {
     flexDirection: 'column',
     fontSize: 65,
     fontWeight: 'bold',
     color: 'white',
     textAlign: 'center',
+    lineHeight: 65,
     textShadowColor: '#184445',
     textShadowOffset: {width: 0, height: 0},
     textShadowRadius: 20,
