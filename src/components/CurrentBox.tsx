@@ -1,16 +1,14 @@
 import {StyleSheet, Text, View} from 'react-native';
-import {getWeatherIcon, getWeatherLabel} from '../utilities/getWeatherStatus';
+import {getWeatherIcon, getWeatherLabel, WeatherStatuses} from '../utilities/getWeatherStatus';
 import {SunPositionTracker} from './SunPositionTracker';
 import {format, parseISO, addMinutes} from 'date-fns';
 import {useEffect, useState} from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-export const CurrentBox = ({weatherData, searchTerm}: CurrentBoxProps) => {
+export const CurrentBox = ({weatherData, generalWeatherCondition, searchTerm}: CurrentBoxProps) => {
   const temperature = Math.round(weatherData?.current?.temperature_2m) ?? 'N/A';
   const humidity = Math.round(weatherData?.current?.relative_humidity_2m ?? 0);
   const windSpeed = Math.round(weatherData?.current?.wind_speed_10m ?? 0);
-  const weatherIconStatusCode = weatherData?.current?.weather_code ?? 0;
-  const generalWeatherCondition = getWeatherLabel(weatherIconStatusCode);
   const generalWeatherIcon = getWeatherIcon(generalWeatherCondition);
 
   const [incrementingTime, setIncrementingTime] = useState<Date | null>(null);
@@ -91,7 +89,7 @@ const styles = StyleSheet.create({
 
   topBox: {
     justifyContent: 'flex-start',
-    padding: 20,
+    padding: 15,
   },
 
   middleBox: {
@@ -106,7 +104,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    padding: 15,
     gap: 25,
   },
 
@@ -188,6 +186,7 @@ const styles = StyleSheet.create({
 type CurrentBoxProps = {
   weatherData: WeatherData;
   searchTerm: string;
+  generalWeatherCondition: WeatherStatuses;
 };
 
 type WeatherData = {

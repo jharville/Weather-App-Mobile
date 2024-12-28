@@ -1,10 +1,12 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import {MainStackScreenProps} from '../navigation/types/navigation.types';
 import {LinearGradient} from 'react-native-gradients';
 import {CurrentBox} from '../components/CurrentBox';
 import {ActivityIndicator} from 'react-native';
 import {LoadingStatuses} from '../utilities/useWeatherFetch';
+import {ForecastBox} from '../components/ForecastBox';
+import {getWeatherIcon, getWeatherLabel} from '../utilities/getWeatherStatus';
 
 // #region Weather Fetch Logic
 const weatherFetch = async (cityName: string) => {
@@ -46,6 +48,13 @@ export const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
 
   const searchTerm = route.params?.searchTerm ?? '';
 
+  // sets the initial highlighted forecast date
+  const [dayClickedIndex, setDayClickedIndex] = useState(0);
+
+  const handleDayClick = (index: number) => {
+    setDayClickedIndex(index);
+  };
+
   //For displaying only the city and country/city returned from the autofill.
   // city and country are simply what we are calling the parts of the suggestion that gets split up by the following code.
   const [city, country] = (() => {
@@ -81,22 +90,42 @@ export const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
     }
   }, [searchTerm, fetchWeatherData]);
 
+  const weatherIconStatusCode = weather?.current?.weather_code ?? 0;
+  const generalWeatherCondition = getWeatherLabel(weatherIconStatusCode);
+
   return (
     <>
       <View style={styles.resultBackgroundGradiant}>
         <LinearGradient colorList={gradientColors} angle={90} />
       </View>
-
-      <View style={styles.parentOfMainContainer}>
-        <View style={styles.mainContainer}>
-          <Text style={styles.error}>{weatherFetchError}</Text>
-          {loadingStatus === 'Loading' ? (
-            <ActivityIndicator size={40} color={'white'} />
-          ) : (
-            <CurrentBox weatherData={weather} searchTerm={formattedSearchTerm} />
-          )}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.parentOfMainContainer}>
+          <View style={styles.mainContainer}>
+            <Text style={styles.error}>{weatherFetchError}</Text>
+            {loadingStatus === 'Loading' ? (
+              // ActivityIndicator is a loading icon
+              <ActivityIndicator size={40} color={'white'} />
+            ) : (
+              <View style={styles.componentsContainer}>
+                <CurrentBox
+                  weatherData={weather}
+                  generalWeatherCondition={generalWeatherCondition}
+                  searchTerm={formattedSearchTerm}
+                />
+                <ForecastBox
+                  generalWeatherCondition={generalWeatherCondition}
+                  WeatherCode={weather?.daily?.weather_code}
+                  minTemp={weather?.daily?.temperature_2m_min}
+                  maxTemp={weather?.daily?.temperature_2m_max}
+                  forecastDates={weather?.daily?.time || []}
+                  loadingStatus={loadingStatus}
+                  dayClicked={handleDayClick}
+                />
+              </View>
+            )}
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 };
@@ -116,14 +145,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     gap: 15,
   },
-  currentBox: {
-    borderWidth: 5,
-    borderRadius: 35,
-    borderColor: '#4b5e94',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 20,
+
+  componentsContainer: {
+    gap: 15,
   },
   topAndBottomContainer: {
     flexDirection: 'column',
@@ -171,6 +195,6 @@ const styles = StyleSheet.create({
 });
 
 const gradientColors = [
-  {offset: '0%', color: '#0F0E2C', opacity: '1'},
-  {offset: '100%', color: '#202b70', opacity: '1'},
+  {offset: '0%', color: '#0a0a22', opacity: '1'},
+  {offset: '100%', color: '#0e143e', opacity: '1'},
 ];
