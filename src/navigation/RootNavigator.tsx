@@ -5,13 +5,9 @@ import {RootNavigatorParamList} from './types/navigation.types';
 
 const Stack = createNativeStackNavigator<RootNavigatorParamList>();
 
-// pull out header show rerenders
-
 const RootNavigator = () => {
   return (
-    <Stack.Navigator
-      initialRouteName="LandingStack" // Tells where to go by default
-      screenOptions={{headerShown: false}}>
+    <Stack.Navigator initialRouteName="LandingStack" screenOptions={{headerShown: false}}>
       <Stack.Screen name="LandingStack" component={LandingStack} />
       <Stack.Screen name="MainStack" component={MainStack} />
     </Stack.Navigator>

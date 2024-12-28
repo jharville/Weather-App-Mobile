@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator<MainStackParamList>();
 
 const resultScreenOptions: NativeStackNavigationOptions = {
   headerLeft: HeaderBackButton,
-  headerTitle: HeaderCalendarButton,
+  headerTitle: '',
   headerRight: HeaderSettingsButton,
   headerBackVisible: false,
   headerShadowVisible: false,
