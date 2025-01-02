@@ -14,6 +14,9 @@ const debounce = (callbackFunction: (searchedCity: string) => void, delay: numbe
   };
 };
 
+const ItemSeparatorComponent = () => <View style={styles.suggestionDivider} />;
+const keyExtractor = (item: Suggestion) => item.place_id;
+
 export const CustomAddressAutofill: React.FC<CustomAddressAutofillProps> = ({
   onAcceptedSuggestion,
   onNotSuggestionSubmit,
@@ -57,20 +60,17 @@ export const CustomAddressAutofill: React.FC<CustomAddressAutofillProps> = ({
   }, [onNotSuggestionSubmit]);
 
   const renderItem = useCallback(
-    ({item, index}: {item: Suggestion; index: number}) => {
+    ({item}: IRenderItemProps) => {
+      const isDisabled = !onAcceptedSuggestion;
+      const handleSelectItem = () => onAcceptedSuggestion?.(item.display_name);
+
       return (
-        <TouchableOpacity onPress={() => onAcceptedSuggestion?.(item.display_name)}>
-          <Text
-            style={[
-              styles.suggestionText,
-              index !== suggestions.length - 1 ? styles.suggestionDivider : null,
-            ]}>
-            {item.display_name}
-          </Text>
+        <TouchableOpacity disabled={isDisabled} onPress={handleSelectItem}>
+          <Text style={styles.suggestionText}>{item.display_name}</Text>
         </TouchableOpacity>
       );
     },
-    [onAcceptedSuggestion, suggestions.length],
+    [onAcceptedSuggestion],
   );
 
   return (
@@ -81,7 +81,8 @@ export const CustomAddressAutofill: React.FC<CustomAddressAutofillProps> = ({
           <FlatList
             data={suggestions}
             renderItem={renderItem}
-            keyExtractor={item => item.place_id}
+            keyExtractor={keyExtractor}
+            ItemSeparatorComponent={ItemSeparatorComponent}
           />
         </View>
       )}
@@ -134,4 +135,8 @@ interface CustomAddressAutofillProps {
   onNotSuggestionSubmit?: () => void;
   searchedCity: string;
   children?: React.ReactNode;
+}
+interface IRenderItemProps {
+  item: Suggestion;
+  index: number;
 }

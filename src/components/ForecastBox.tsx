@@ -1,50 +1,51 @@
-import React, {useState, useRef, useCallback} from 'react';
-import {View, Text, ScrollView, TouchableOpacity, StyleSheet, FlatList, Button} from 'react-native';
+import React, {useState, useCallback} from 'react';
+import {View, Text, TouchableOpacity, StyleSheet, FlatList, ViewStyle} from 'react-native';
 import {format, parseISO} from 'date-fns';
 import {getWeatherLabel, getWeatherIcon, WeatherStatuses} from '../utilities/getWeatherStatus';
 import {LoadingStatuses} from '../utilities/useWeatherFetch';
 
-const daySpanOptions = {
-  7: 7,
-  14: 14,
-};
-
-const ItemSeparatorComponent = () => {
-  return <View style={styles.itemSeparator} />;
-};
+enum DaySpanOptions {
+  Seven = 7,
+  Fourteen = 14,
+}
 
 export const ForecastBox = ({
   WeatherCode,
   maxTemp,
   minTemp,
   forecastDates,
-  dayClicked,
+  onDaySelect,
 }: ForecastBoxProps) => {
-  const [selectedDaySpanOption, setSelectedDaySpanOption] = useState(daySpanOptions[7]);
-  const [currentClickedDayIndex, setCurrentClickedDayIndex] = useState<number | null>(0);
+  const [selectedDaySpanOption, setSelectedDaySpanOption] = useState<DaySpanOptions>(
+    DaySpanOptions.Seven,
+  );
+  const [selectedDayIndex, setSelectedDayIndex] = useState<number | null>(0);
 
-  const handleSelectOption = (selectedOption: number) => {
+  const styles = useStyles({selectedDaySpanOption});
+
+  const handleSelectOption = useCallback((selectedOption: DaySpanOptions) => {
     setSelectedDaySpanOption(selectedOption);
-    setCurrentClickedDayIndex(null);
-  };
+  }, []);
 
-  const handleDayClick = (index: number) => {
-    setCurrentClickedDayIndex(index);
-    dayClicked(index);
-  };
-
-  const getButtonStyle = (paramChosen: number) => [
-    styles.dayParamSelect,
-    selectedDaySpanOption === paramChosen && styles.dayParamSelectClicked,
-  ];
-
-  const isValidForecast = !!forecastDates?.length;
+  const handleDayClick = useCallback(
+    (index: number) => {
+      onDaySelect(index); // Notifies the parent component about the selected day
+      setSelectedDayIndex(index);
+    },
+    [onDaySelect],
+  );
 
   const renderForecastItem = useCallback(
-    ({item, index}: {item: string; index: number}) => {
+    ({item, index}: IRenderForecastItemProps) => {
+      const isSelected = selectedDayIndex === index;
+
+      const getDateStyles = (isSelected: boolean) => {
+        return isSelected ? styles.selectedDayStyle : styles.unselectedDatesStyle;
+      };
+
       return (
         <TouchableOpacity onPress={() => handleDayClick(index)}>
-          <View style={styles.mappedDatesContainer}>
+          <View style={getDateStyles(isSelected)}>
             <View style={styles.dateContainer}>
               <Text style={styles.dayStyle}>{format(parseISO(item), 'EEE')}</Text>
               <Text style={styles.monthAndDateStyle}>{format(parseISO(item), 'MMM, do')}</Text>
@@ -62,14 +63,27 @@ export const ForecastBox = ({
 
             <View>
               <Text style={styles.tempContainer}>
-                {Math.round(minTemp[index])} / {Math.round(maxTemp[index]) + ` \u00B0F`}
+                {Math.round(minTemp[index])} / {Math.round(maxTemp[index]) + ' \u00B0F'}
               </Text>
             </View>
           </View>
         </TouchableOpacity>
       );
     },
-    [isValidForecast],
+    [
+      WeatherCode,
+      handleDayClick,
+      maxTemp,
+      minTemp,
+      styles.dateContainer,
+      styles.dayStyle,
+      styles.generalConditionStyle,
+      styles.iconAndConditionContainer,
+      styles.iconContainer,
+      styles.unselectedDatesStyle,
+      styles.monthAndDateStyle,
+      styles.tempContainer,
+    ],
   );
 
   return (
@@ -77,19 +91,22 @@ export const ForecastBox = ({
       <View style={styles.forecastTextAndButtons}>
         <Text style={styles.forecastText}>Forecast</Text>
         <View style={styles.daySelectorContainer}>
-          <View style={getButtonStyle(daySpanOptions[7])}>
-            <TouchableOpacity hitSlop={12} onPressIn={() => handleSelectOption(daySpanOptions[7])}>
+          <View style={styles.sevenButton}>
+            <TouchableOpacity
+              hitSlop={12}
+              onPressIn={() => handleSelectOption(DaySpanOptions.Seven)}>
               <Text style={styles.paramText}>7 Day</Text>
             </TouchableOpacity>
           </View>
-          <View style={getButtonStyle(daySpanOptions[14])}>
-            <TouchableOpacity hitSlop={12} onPressIn={() => handleSelectOption(daySpanOptions[14])}>
+          <View style={styles.fourteenButton}>
+            <TouchableOpacity
+              hitSlop={12}
+              onPressIn={() => handleSelectOption(DaySpanOptions.Fourteen)}>
               <Text style={styles.paramText}>14 Day</Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
-
       <FlatList
         ItemSeparatorComponent={ItemSeparatorComponent}
         scrollEnabled={false}
@@ -100,123 +117,140 @@ export const ForecastBox = ({
   );
 };
 
-const styles = StyleSheet.create({
-  forecastBoxStyle: {
-    gap: 15,
-    borderWidth: 5,
-    borderRadius: 35,
-    borderColor: '#4b5e94',
-    flexDirection: 'column',
-    padding: 15,
-    backgroundColor: '#4b5e9434',
-  },
+const baseButtonStyle: ViewStyle = {
+  flexDirection: 'row',
+  borderRadius: 8,
+  borderWidth: 3,
+  backgroundColor: '#afb0b7',
+  maxWidth: 100,
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: 5,
+};
 
-  forecastTextAndButtons: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    // paddingHorizontal: 5,
-    justifyContent: 'space-between',
-  },
+const selectedButtonStyle: ViewStyle = {
+  ...baseButtonStyle,
+  backgroundColor: '#196cf1',
+};
 
-  daySelectorContainer: {
-    // flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 7,
-    borderRadius: 8,
-    backgroundColor: '#1b4a7cfe',
-    paddingVertical: 5,
-    paddingHorizontal: 5,
-  },
+const useStyles = ({selectedDaySpanOption}: {selectedDaySpanOption?: DaySpanOptions}) => {
+  const isSevenSelected = selectedDaySpanOption === DaySpanOptions.Seven;
+  const isFourteenSelected = selectedDaySpanOption === DaySpanOptions.Fourteen;
+  return StyleSheet.create({
+    forecastBoxStyle: {
+      gap: 15,
+      borderWidth: 5,
+      borderRadius: 35,
+      borderColor: '#4b5e94',
+      flexDirection: 'column',
+      padding: 15,
+      backgroundColor: '#4b5e9434',
+    },
 
-  dayParamSelect: {
-    flexDirection: 'row',
-    borderRadius: 8,
-    borderWidth: 3,
-    backgroundColor: '#afb0b7',
-    maxWidth: 100,
-    fontSize: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 5,
-  },
+    forecastTextAndButtons: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
 
-  dayParamSelectClicked: {
-    backgroundColor: '#196cf1',
-    color: 'rgb(240, 232, 232)',
-  },
+    daySelectorContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: 7,
+      borderRadius: 8,
+      backgroundColor: '#1b4a7c',
+      paddingVertical: 5,
+      paddingHorizontal: 5,
+    },
 
-  paramText: {
-    color: 'black',
-    fontWeight: 'bold',
-  },
+    sevenButton: isSevenSelected ? selectedButtonStyle : baseButtonStyle,
+    fourteenButton: isFourteenSelected ? selectedButtonStyle : baseButtonStyle,
+    paramText: {
+      color: 'black',
+      fontWeight: 'bold',
+    },
 
-  forecastText: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: 'white',
-  },
+    forecastText: {
+      fontSize: 28,
+      fontWeight: 'bold',
+      color: 'white',
+    },
 
-  calendarButton: {
-    color: 'white',
-    fontSize: 30,
-  },
+    unselectedDatesStyle: {
+      flexDirection: 'row',
+      paddingHorizontal: 10,
+      borderWidth: 2,
+      borderRadius: 15,
+      borderColor: '#4b5e94',
+      alignItems: 'center',
+    },
 
-  mappedDatesContainer: {
-    flexDirection: 'row',
-    paddingHorizontal: 10,
-    borderWidth: 2,
-    borderRadius: 15,
-    borderColor: '#4b5e94',
-    alignItems: 'center',
-  },
+    selectedDayStyle: {
+      backgroundColor: '#1b4a7c',
+      borderColor: '#1f6fb2',
+      flexDirection: 'row',
+      paddingHorizontal: 10,
+      borderWidth: 2,
+      borderRadius: 15,
+      alignItems: 'center',
+    },
 
-  itemSeparator: {
-    paddingVertical: 4,
-  },
+    itemSeparator: {
+      paddingVertical: 4,
+    },
 
-  dateContainer: {flex: 1},
+    dateContainer: {flex: 1},
+    iconAndConditionContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingRight: 5,
+      width: 180,
+    },
 
-  iconAndConditionContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingRight: 5,
-    width: 180,
-  },
+    iconContainer: {
+      transform: [{scale: 0.7}],
+      alignItems: 'center',
+      overflow: 'hidden',
+      width: 88,
+      height: 80,
+      justifyContent: 'center',
+    },
 
-  iconContainer: {
-    transform: [{scale: 0.7}],
-    alignItems: 'center',
-    overflow: 'hidden',
-    width: 88,
-    height: 80,
-    justifyContent: 'center',
-  },
+    generalConditionStyle: {
+      color: 'white',
+      flexShrink: 1,
+    },
 
-  generalConditionStyle: {
-    color: 'white',
-    flexShrink: 1,
-  },
+    dayStyle: {
+      flexDirection: 'column',
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: 'white',
+    },
 
-  dayStyle: {
-    flexDirection: 'column',
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'white',
-  },
+    monthAndDateStyle: {
+      fontSize: 14,
+      color: 'white',
+    },
 
-  monthAndDateStyle: {
-    fontSize: 14,
-    color: 'white',
-  },
+    tempContainer: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: 'white',
+    },
+  });
+};
 
-  tempContainer: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-});
+const ItemSeparatorComponent = () => {
+  const styles = useStyles({});
+  return <View style={styles.itemSeparator} />;
+};
+
+interface IRenderForecastItemProps {
+  item: string;
+  index: number;
+}
 
 type ForecastBoxProps = {
   generalWeatherCondition: WeatherStatuses;
@@ -225,5 +259,5 @@ type ForecastBoxProps = {
   minTemp: number[];
   forecastDates: string[];
   loadingStatus: LoadingStatuses;
-  dayClicked: (index: number) => void;
+  onDaySelect: (index: number) => void;
 };
