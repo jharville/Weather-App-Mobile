@@ -6,7 +6,7 @@ import {CurrentBox} from '../components/CurrentBox';
 import {ActivityIndicator} from 'react-native';
 import {LoadingStatuses} from '../utilities/useWeatherFetch';
 import {ForecastBox} from '../components/ForecastBox';
-import {getWeatherIcon, getWeatherLabel} from '../utilities/getWeatherStatus';
+import {getWeatherLabel} from '../utilities/getWeatherStatus';
 
 // #region Weather Fetch Logic
 const weatherFetch = async (cityName: string) => {
@@ -37,12 +37,7 @@ const weatherFetch = async (cityName: string) => {
 export const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
   const [weather, setWeather] = useState<any | null>(null);
 
-  const [loadingStatus, setLoadingStatus] = useState<
-    | LoadingStatuses.Idle
-    | LoadingStatuses.Loading
-    | LoadingStatuses.Fulfilled
-    | LoadingStatuses.Rejected
-  >(LoadingStatuses.Idle);
+  const [loadingStatus, setLoadingStatus] = useState<LoadingStatuses>(LoadingStatuses.Idle);
 
   const [weatherFetchError, setWeatherFetchError] = useState<string | null>(null);
 
@@ -51,9 +46,9 @@ export const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
   // sets the initial highlighted forecast date
   const [dayClickedIndex, setDayClickedIndex] = useState(0);
 
-  const handleDayClick = (index: number) => {
+  const handleDayClick = useCallback((index: number) => {
     setDayClickedIndex(index);
-  };
+  }, []);
 
   //For displaying only the city and country/city returned from the autofill.
   // city and country are simply what we are calling the parts of the suggestion that gets split up by the following code.
@@ -93,6 +88,7 @@ export const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
   const weatherIconStatusCode = weather?.current?.weather_code ?? 0;
   const generalWeatherCondition = getWeatherLabel(weatherIconStatusCode);
 
+  console.log(dayClickedIndex);
   return (
     <>
       <View style={styles.resultBackgroundGradiant}>
@@ -119,7 +115,7 @@ export const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
                   maxTemp={weather?.daily?.temperature_2m_max}
                   forecastDates={weather?.daily?.time || []}
                   loadingStatus={loadingStatus}
-                  dayClicked={handleDayClick}
+                  onDaySelect={handleDayClick}
                 />
               </View>
             )}
