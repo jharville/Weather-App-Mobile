@@ -3,6 +3,11 @@
 A simple Mobile app that displays local weather variables based on search.
 THIS IS A WIP. 
 
+
+![Screen Shot 2025-01-14 at 11 50 14 AM](https://github.com/user-attachments/assets/d9769670-cacb-4331-9a98-5122770f9cbc)
+![Screen Shot 2025-01-14 at 11 50 45 AM](https://github.com/user-attachments/assets/f0bbe363-58e4-464f-8845-ceae10246691)
+![Screen Shot 2025-01-14 at 11 51 16 AM](https://github.com/user-attachments/assets/eae346d1-056e-47c7-b4da-8df547934518)
+
 ## Initial Setup :
 - First, clone the repo.
 - Then run `npm install` (instructions for installing npm can be found [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) if you dont already have it)
@@ -43,8 +48,4 @@ Support is not available for ios at the moment, but it is actively being worked 
 
 Enjoy!
 
-
-![Screen Shot 2025-01-14 at 11 50 14 AM](https://github.com/user-attachments/assets/d9769670-cacb-4331-9a98-5122770f9cbc)
-![Screen Shot 2025-01-14 at 11 50 45 AM](https://github.com/user-attachments/assets/f0bbe363-58e4-464f-8845-ceae10246691)
-![Screen Shot 2025-01-14 at 11 51 16 AM](https://github.com/user-attachments/assets/eae346d1-056e-47c7-b4da-8df547934518)
 
