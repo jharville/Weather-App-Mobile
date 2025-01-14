@@ -85,6 +85,15 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    // externalNativeBuild {
+    //     cmake {
+    //         version "3.31.1"
+    //     }
+    // }
+
+
+    
     signingConfigs {
         debug {
             storeFile file('debug.keystore')
@@ -105,6 +114,7 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+
 }
 
 dependencies {
