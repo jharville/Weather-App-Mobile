@@ -6,7 +6,7 @@ import {
   useWindowDimensions,
   ActivityIndicator,
 } from 'react-native';
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {useCallback, useMemo, useRef, useState} from 'react';
 import {LoadingStatuses} from '../utilities/useWeatherFetch';
 import {format, parseISO} from 'date-fns';
 import {getWeatherIcon, getWeatherLabel} from '../utilities/getWeatherStatus';
@@ -235,8 +235,9 @@ export const SummaryChart = ({
     {time: '11 PM', icon: filteredWeatherIcons?.[23]},
   ];
 
-  const selectedIconsData =
-    selectedOption === buttonOptions.summary ? summaryIconArray : hourlyIconArray;
+  const selectedIconsData = useMemo(() => {
+    return selectedOption === buttonOptions.summary ? summaryIconArray : hourlyIconArray;
+  }, [selectedOption, summaryIconArray, hourlyIconArray]);
 
   const scrollViewRef = useRef<ScrollView>(null);
 
