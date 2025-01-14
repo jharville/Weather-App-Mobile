@@ -126,11 +126,11 @@ export const getWeatherIcon = (status: WeatherStatuses) => {
     case WeatherStatuses.FreezingRainHeavy:
       return <MaterialCommunityIcons name="weather-snowy-heavy" color="grey" size={90} />;
     case WeatherStatuses.SnowFallLight:
-      return <FontAwesome5 name="snowflake" color="white" size={60} />;
+      return <FontAwesome5 name="snowflake" color="white" size={75} />;
     case WeatherStatuses.SnowFallModerate:
       return <FontAwesome5 name="snowflake" color="white" size={75} />;
     case WeatherStatuses.SnowFallHeavy:
-      return <FontAwesome5 name="snowflake" color="grey" size={90} />;
+      return <FontAwesome5 name="snowflake" color="grey" size={80} />;
     case WeatherStatuses.SnowGrains:
       return <FontAwesome name="asterisk" color="white" size={60} />;
     case WeatherStatuses.RainShowersLight:
@@ -148,8 +148,8 @@ export const getWeatherIcon = (status: WeatherStatuses) => {
     default:
       return (
         <View>
-          <Text>I'm the default</Text>
-          <FontAwesome6 name="sun" color="goldenrod" size={75} />
+          <Text style={{color: 'white'}}>Default Returned</Text>
+          {/* <FontAwesome6 name="sun" color="goldenrod" size={70} /> */}
         </View>
       );
   }

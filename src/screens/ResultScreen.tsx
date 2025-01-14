@@ -7,6 +7,7 @@ import {ActivityIndicator} from 'react-native';
 import {LoadingStatuses} from '../utilities/useWeatherFetch';
 import {ForecastBox} from '../components/ForecastBox';
 import {getWeatherLabel} from '../utilities/getWeatherStatus';
+import {SummaryChart} from '../components/SummaryChart';
 
 // #region Weather Fetch Logic
 const weatherFetch = async (cityName: string) => {
@@ -88,38 +89,44 @@ export const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
   const weatherIconStatusCode = weather?.current?.weather_code ?? 0;
   const generalWeatherCondition = getWeatherLabel(weatherIconStatusCode);
 
-  console.log(dayClickedIndex);
   return (
     <>
       <View style={styles.resultBackgroundGradiant}>
         <LinearGradient colorList={gradientColors} angle={90} />
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.parentOfMainContainer}>
-          <View style={styles.mainContainer}>
-            <Text style={styles.error}>{weatherFetchError}</Text>
-            {loadingStatus === 'Loading' ? (
-              // ActivityIndicator is a loading icon
-              <ActivityIndicator size={40} color={'white'} />
-            ) : (
-              <View style={styles.componentsContainer}>
-                <CurrentBox
-                  weatherData={weather}
-                  generalWeatherCondition={generalWeatherCondition}
-                  searchTerm={formattedSearchTerm}
-                />
-                <ForecastBox
-                  generalWeatherCondition={generalWeatherCondition}
-                  WeatherCode={weather?.daily?.weather_code}
-                  minTemp={weather?.daily?.temperature_2m_min}
-                  maxTemp={weather?.daily?.temperature_2m_max}
-                  forecastDates={weather?.daily?.time || []}
-                  loadingStatus={loadingStatus}
-                  onDaySelect={handleDayClick}
-                />
-              </View>
-            )}
-          </View>
+        <View style={styles.mainContainer}>
+          <Text style={styles.error}>{weatherFetchError}</Text>
+          {loadingStatus === 'Loading' ? (
+            // ActivityIndicator is a loading icon
+            <ActivityIndicator size={40} color={'white'} />
+          ) : (
+            <View style={styles.componentsContainer}>
+              <CurrentBox
+                weatherData={weather}
+                generalWeatherCondition={generalWeatherCondition}
+                searchTerm={formattedSearchTerm}
+              />
+              <ForecastBox
+                generalWeatherCondition={generalWeatherCondition}
+                WeatherCode={weather?.daily?.weather_code}
+                minTemp={weather?.daily?.temperature_2m_min}
+                maxTemp={weather?.daily?.temperature_2m_max}
+                forecastDates={weather?.daily?.time || []}
+                onDaySelect={handleDayClick}
+              />
+
+              <SummaryChart
+                loadingStatus={loadingStatus}
+                weatherCode={weather?.hourly?.weather_code}
+                rain={weather?.hourly?.precipitation_probability}
+                temps={weather?.hourly?.temperature_2m || []}
+                forecastDate={weather?.daily?.time}
+                dayClickedIndex={dayClickedIndex}
+                setDayClickedIndex={setDayClickedIndex}
+              />
+            </View>
+          )}
         </View>
       </ScrollView>
     </>
@@ -134,9 +141,7 @@ const styles = StyleSheet.create({
     left: 0,
     bottom: 0,
   },
-  parentOfMainContainer: {
-    paddingTop: 15,
-  },
+
   mainContainer: {
     paddingHorizontal: 15,
     gap: 15,
@@ -145,9 +150,11 @@ const styles = StyleSheet.create({
   componentsContainer: {
     gap: 15,
   },
+
   topAndBottomContainer: {
     flexDirection: 'column',
   },
+
   topBox: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -155,6 +162,7 @@ const styles = StyleSheet.create({
     padding: 20,
     gap: 25,
   },
+
   bottomBox: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -162,28 +170,33 @@ const styles = StyleSheet.create({
     padding: 20,
     gap: 25,
   },
+
   tempAndConditionBox: {
     flexDirection: 'column',
     alignItems: 'center',
   },
+
   conditionText: {
     color: 'white',
     fontSize: 24,
   },
+
   searchTerm: {
     color: 'white',
     fontSize: 24,
   },
+
   tempText: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 48,
   },
-  backButton: {},
+
   text: {
     color: 'white',
     fontSize: 18,
   },
+
   error: {
     color: 'red',
     fontSize: 16,

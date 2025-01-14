@@ -4,7 +4,6 @@ import {MainStackParamList} from './types/navigation.types';
 import {NativeStackNavigationOptions} from '@react-navigation/native-stack';
 import {HeaderBackButton} from './HeaderComponents/HeaderBackButton';
 import {HeaderSettingsButton} from './HeaderComponents/HeaderSettingsButton';
-import {HeaderCalendarButton} from './HeaderComponents/HeaderCalendarButton';
 
 const Stack = createNativeStackNavigator<MainStackParamList>();
 

@@ -2,7 +2,6 @@ import React, {useState, useCallback} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, FlatList, ViewStyle} from 'react-native';
 import {format, parseISO} from 'date-fns';
 import {getWeatherLabel, getWeatherIcon, WeatherStatuses} from '../utilities/getWeatherStatus';
-import {LoadingStatuses} from '../utilities/useWeatherFetch';
 
 enum DaySpanOptions {
   Seven = 7,
@@ -157,7 +156,7 @@ const useStyles = ({selectedDaySpanOption}: {selectedDaySpanOption?: DaySpanOpti
       flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
-      gap: 7,
+      gap: 5,
       borderRadius: 8,
       backgroundColor: '#1b4a7c',
       paddingVertical: 5,
@@ -258,6 +257,6 @@ type ForecastBoxProps = {
   maxTemp: number[];
   minTemp: number[];
   forecastDates: string[];
-  loadingStatus: LoadingStatuses;
+
   onDaySelect: (index: number) => void;
 };
