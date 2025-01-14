@@ -1,5 +1,5 @@
 
-# WeatherApp (Mobile)
+# Weather App (Mobile)
 A simple Mobile app that displays local weather variables based on search.
 THIS IS A WIP. 
 
