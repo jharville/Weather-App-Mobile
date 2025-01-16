@@ -8,6 +8,7 @@ import {LoadingStatuses} from '../utilities/useWeatherFetch';
 import {ForecastBox} from '../components/ForecastBox';
 import {getWeatherLabel} from '../utilities/getWeatherStatus';
 import {SummaryChart} from '../components/SummaryChart';
+import {UVBox} from '../components/UVBox';
 
 // #region Weather Fetch Logic
 const weatherFetch = async (cityName: string) => {
@@ -89,6 +90,8 @@ export const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
   const weatherIconStatusCode = weather?.current?.weather_code ?? 0;
   const generalWeatherCondition = getWeatherLabel(weatherIconStatusCode);
 
+  const formattedUV = Math.round(weather?.daily?.uv_index_max[0]);
+  const formattedSunHours = Math.round(weather?.daily?.sunshine_duration[0] / 3600);
   return (
     <>
       <View style={styles.resultBackgroundGradiant}>
@@ -124,6 +127,12 @@ export const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
                 forecastDate={weather?.daily?.time}
                 dayClickedIndex={dayClickedIndex}
                 setDayClickedIndex={setDayClickedIndex}
+              />
+
+              <UVBox
+                uvValue={formattedUV}
+                sunDuration={formattedSunHours}
+                loadingStatus={undefined}
               />
             </View>
           )}

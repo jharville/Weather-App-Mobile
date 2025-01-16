@@ -60,7 +60,7 @@ export const SummaryChart = ({
     () => temps.slice(startHour, endHour).map((temp: number) => Math.round(temp)),
     [temps, startHour, endHour],
   );
-  console.log(loadingStatus);
+
   const summaryTempArray = [
     {time: '12 AM', temp: dayTemps?.[0]},
     {time: '2 AM', temp: dayTemps?.[2]},
