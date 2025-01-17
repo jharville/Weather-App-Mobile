@@ -7,7 +7,6 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {useCallback, useMemo, useRef, useState} from 'react';
-import {LoadingStatuses} from '../utilities/useWeatherFetch';
 import {format, parseISO} from 'date-fns';
 import {getWeatherIcon, getWeatherLabel} from '../utilities/getWeatherStatus';
 import React from 'react';
@@ -43,7 +42,6 @@ const chartConfig = {
 };
 
 export const SummaryChart = ({
-  loadingStatus,
   weatherCode = [],
   rain = [],
   temps = [],
@@ -54,7 +52,6 @@ export const SummaryChart = ({
   const [selectedOption, setSelectedOption] = useState(buttonOptions.summary);
   const startHour = dayClickedIndex * 24;
   const endHour = startHour + 24;
-  const loadingDone = loadingStatus === LoadingStatuses.Fulfilled;
 
   const dayTemps = useMemo(
     () => temps.slice(startHour, endHour).map((temp: number) => Math.round(temp)),
@@ -104,7 +101,7 @@ export const SummaryChart = ({
   ];
 
   const selectedDate =
-    loadingDone && forecastDate && forecastDate[dayClickedIndex]
+    forecastDate && forecastDate[dayClickedIndex]
       ? format(parseISO(forecastDate[dayClickedIndex]), 'EEE, do')
       : '';
 
@@ -172,7 +169,7 @@ export const SummaryChart = ({
 
   const filteredTempData = useMemo(
     () => getSelectedTempData(selectedOption),
-    [dayClickedIndex, selectedOption, loadingDone],
+    [dayClickedIndex, selectedOption],
   );
 
   const {width: screenWidth} = useWindowDimensions();
@@ -275,85 +272,81 @@ export const SummaryChart = ({
         />
       </View>
 
-      {!loadingDone ? (
-        <ActivityIndicator size="large" color="white" />
-      ) : (
-        <>
-          <View style={styles.datesContainer}>
-            <View style={styles.arrowAndDateContainer}>
-              {dayClickedIndex > 0 && (
-                <MemoizedPressableScaleButton
-                  style={styles.scaleButtonStyle}
-                  scale={0.83}
-                  onPress={handlePrevDayPress}>
-                  <AntDesignIcon name="leftcircleo" size={30} color="white" />
-                </MemoizedPressableScaleButton>
-              )}
-              <Text style={styles.Date}>{selectedDate}</Text>
-            </View>
-
-            <View style={styles.arrowAndDateContainer}>
-              <Text style={styles.Date}>{dateNext()}</Text>
-              {dayClickedIndex < 13 && (
-                <MemoizedPressableScaleButton
-                  style={styles.scaleButtonStyle}
-                  scale={0.83}
-                  onPress={handleNextDayPress}>
-                  <AntDesignIcon name="rightcircleo" size={30} color="white" />
-                </MemoizedPressableScaleButton>
-              )}
-            </View>
+      <>
+        <View style={styles.datesContainer}>
+          <View style={styles.arrowAndDateContainer}>
+            {dayClickedIndex > 0 && (
+              <MemoizedPressableScaleButton
+                style={styles.scaleButtonStyle}
+                scale={0.83}
+                onPress={handlePrevDayPress}>
+                <AntDesignIcon name="leftcircleo" size={30} color="white" />
+              </MemoizedPressableScaleButton>
+            )}
+            <Text style={styles.Date}>{selectedDate}</Text>
           </View>
 
-          <View style={styles.chartBorder}>
-            <ScrollView horizontal ref={scrollViewRef} showsHorizontalScrollIndicator={false}>
-              <View style={{width: tempChartWidth}}>
-                <View style={styles.tempChartContainer}>
-                  <LineChart
-                    data={{
-                      labels: selectedTempData.map(item => item.time),
-                      datasets: [{data: selectedTempData.map(item => item.temp || 0)}],
-                    }}
-                    width={tempChartWidth}
-                    height={210}
-                    yAxisSuffix=""
-                    withOuterLines={false}
-                    withInnerLines={false}
-                    withHorizontalLabels={false}
-                    style={{paddingRight: +40}}
-                    yLabelsOffset={10}
-                    xLabelsOffset={-160}
-                    fromNumber={90} //use this to control curviness of line
-                    bezier={false}
-                    chartConfig={chartConfig}
-                    renderDotContent={({x, y, index}) => (
-                      <>
-                        {/* Temp Values */}
-                        <Text style={[styles.tempValues, {left: x - 16, top: -120}]}>
-                          {selectedTempData[index]?.temp}°F
+          <View style={styles.arrowAndDateContainer}>
+            <Text style={styles.Date}>{dateNext()}</Text>
+            {dayClickedIndex < 13 && (
+              <MemoizedPressableScaleButton
+                style={styles.scaleButtonStyle}
+                scale={0.83}
+                onPress={handleNextDayPress}>
+                <AntDesignIcon name="rightcircleo" size={30} color="white" />
+              </MemoizedPressableScaleButton>
+            )}
+          </View>
+        </View>
+
+        <View style={styles.chartBorder}>
+          <ScrollView horizontal ref={scrollViewRef} showsHorizontalScrollIndicator={false}>
+            <View style={{width: tempChartWidth}}>
+              <View style={styles.tempChartContainer}>
+                <LineChart
+                  data={{
+                    labels: selectedTempData.map(item => item.time),
+                    datasets: [{data: selectedTempData.map(item => item.temp || 0)}],
+                  }}
+                  width={tempChartWidth}
+                  height={210}
+                  yAxisSuffix=""
+                  withOuterLines={false}
+                  withInnerLines={false}
+                  withHorizontalLabels={false}
+                  style={{paddingRight: +40}}
+                  yLabelsOffset={10}
+                  xLabelsOffset={-160}
+                  fromNumber={90} //use this to control curviness of line
+                  bezier={false}
+                  chartConfig={chartConfig}
+                  renderDotContent={({x, y, index}) => (
+                    <>
+                      {/* Temp Values */}
+                      <Text style={[styles.tempValues, {left: x - 16, top: -120}]}>
+                        {selectedTempData[index]?.temp}°F
+                      </Text>
+
+                      {/* Icons */}
+                      <View style={[styles.iconContainer, {left: x - 38, top: -190}]}>
+                        {selectedIconsData[index]?.icon}
+                      </View>
+
+                      {/* Rain Values */}
+                      <View>
+                        <Text style={[styles.rainValues, {left: x - 18, top: -30}]}>
+                          <FontAwesomeIcon name="droplet" size={12} color="white" />{' '}
+                          {selectedRainData[index]?.chance}
                         </Text>
-
-                        {/* Icons */}
-                        <View style={[styles.iconContainer, {left: x - 38, top: -190}]}>
-                          {selectedIconsData[index]?.icon}
-                        </View>
-
-                        {/* Rain Values */}
-                        <View>
-                          <Text style={[styles.rainValues, {left: x - 18, top: -30}]}>
-                            <FontAwesomeIcon name="droplet" size={12} color="white" />{' '}
-                            {selectedRainData[index]?.chance}
-                          </Text>
-                        </View>
-                      </>
-                    )}
-                  />
-                </View>
+                      </View>
+                    </>
+                  )}
+                />
               </View>
-            </ScrollView>
-          </View>
-        </>
-      )}
+            </View>
+          </ScrollView>
+        </View>
+      </>
     </View>
   );
 };
@@ -446,7 +439,6 @@ const styles = StyleSheet.create({
 });
 
 type SummaryChartProps = {
-  loadingStatus: LoadingStatuses;
   rain: number[];
   temps: number[];
   forecastDate: string[];

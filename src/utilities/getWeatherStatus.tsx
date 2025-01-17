@@ -106,7 +106,7 @@ export const getWeatherIcon = (status: WeatherStatuses) => {
     case WeatherStatuses.Foggy:
       return <MaterialCommunityIcons name="weather-fog" color="grey" size={90} />;
     case WeatherStatuses.DrizzlingLightly:
-      return <Ionicons name="rainy-outline" size={85} color="grey" />;
+      return <Ionicons name="rainy-outline" size={85} color="white" />;
     case WeatherStatuses.DrizzlingModerately:
       return <Ionicons name="rainy" size={80} color="white" />;
     case WeatherStatuses.DrizzlingDense:
@@ -118,7 +118,7 @@ export const getWeatherIcon = (status: WeatherStatuses) => {
     case WeatherStatuses.RainingLight:
       return <FontAwesome5 name="cloud-rain" size={75} color="grey" />;
     case WeatherStatuses.RainingModerate:
-      return <FontAwesome5 name="cloud-showers-heavy" size={75} color="grey" />;
+      return <FontAwesome5 name="cloud-showers-heavy" size={75} color="white" />;
     case WeatherStatuses.RainingHeavy:
       return <FontAwesome5 name="cloud-showers-heavy" size={75} color="grey" />;
     case WeatherStatuses.FreezingRainLight:
@@ -134,9 +134,9 @@ export const getWeatherIcon = (status: WeatherStatuses) => {
     case WeatherStatuses.SnowGrains:
       return <FontAwesome name="asterisk" color="white" size={60} />;
     case WeatherStatuses.RainShowersLight:
-      return <FontAwesome5 name="cloud-sun-rain" color="grey" size={75} />;
+      return <FontAwesome5 name="cloud-sun-rain" color="white" size={75} />;
     case WeatherStatuses.RainShowersModerate:
-      return <FontAwesome5 name="cloud-rain" color="grey" size={75} />;
+      return <FontAwesome5 name="cloud-rain" color="white" size={75} />;
     case WeatherStatuses.RainShowersViolent:
       return <FontAwesome5 name="cloud-showers-heavy" color="grey" size={75} />;
     case WeatherStatuses.Thunderstorms:
