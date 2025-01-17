@@ -1,28 +1,50 @@
 import React from 'react';
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import RNSpeedometer from 'react-native-speedometer';
-import {LoadingStatuses} from '../utilities/useWeatherFetch';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-const precautionMessages: {[key: string]: {text: string[]; icons: string[]}} = {
+
+type MinutesStyles = {
+  [key: string]: {
+    color: string;
+  };
+};
+
+const minutesStyles: MinutesStyles = {
+  low: {color: '#8bba24'},
+  moderate: {color: '#F7EA48'},
+  high: {color: '#FFC100'},
+  veryHigh: {color: '#ff6f00'},
+  extreme: {color: '#EF3340'},
+  noData: {color: 'gray'},
+};
+
+type PrecautionMessages = {
+  [key: string]: {
+    text: string[];
+    icons: string[];
+  };
+};
+
+const precautionMessages: PrecautionMessages = {
   low: {
-    text: ['lotion', 'sunglasses'],
+    text: ['Lotion', 'Sunglasses'],
     icons: ['lotion', 'sunglasses'],
   },
   moderate: {
-    text: ['lotion', 'sunglasses', 'redhat', 'beach'],
+    text: ['Lotion', 'Sunglasses', 'Hat', 'Shade'],
     icons: ['lotion', 'sunglasses', 'redhat', 'beach'],
   },
   high: {
-    text: ['lotion', 'sunglasses', 'redhat', 'beach', 'tshirt-crew'],
+    text: ['Lotion', 'Sunglasses', 'Hat', 'Shade', 'Clothing'],
     icons: ['lotion', 'sunglasses', 'redhat', 'beach', 'tshirt-crew'],
   },
   veryHigh: {
-    text: ['lotion', 'sunglasses', 'redhat', 'beach', 'tshirt-crew'],
-    icons: ['lotion', 'sunglasses', 'redhat', 'beach', 'tshirt-crew'],
+    text: ['Lotion', 'Sunglasses', 'Hat', 'Clothing', 'Shade'],
+    icons: ['lotion', 'sunglasses', 'redhat', 'tshirt-crew', 'beach'],
   },
   extreme: {
-    text: ['lotion', 'sunglasses', 'redhat', 'beach', 'tshirt-crew'],
-    icons: ['lotion', 'sunglasses', 'redhat', 'beach', 'tshirt-crew'],
+    text: ['Lotion', 'Sunglasses', 'Hat', 'Clothing', 'Shade'],
+    icons: ['lotion', 'sunglasses', 'redhat', 'tshirt-crew', 'beach'],
   },
   noData: {
     text: ['N/A'],
@@ -30,25 +52,39 @@ const precautionMessages: {[key: string]: {text: string[]; icons: string[]}} = {
   },
 };
 
-const labels = [
+type labelTypes = {
+  name: string;
+  labelColor: string;
+  activeBarColor: string;
+};
+const labels: labelTypes[] = [
   {name: '1', labelColor: '#688D1B', activeBarColor: '#688D1B'}, // Dark Green
-  {name: '2', labelColor: '#84BD00', activeBarColor: '#84BD00'}, // Green
+  {name: '2', labelColor: '#7bae02', activeBarColor: '#7cb004'}, // Green
   {name: '3', labelColor: '#97D700', activeBarColor: '#97D700'}, // Light Green
-  {name: '4', labelColor: '#F7EA48', activeBarColor: '#dbd03f'}, // Yellow
-  {name: '5', labelColor: '#FCE300', activeBarColor: '#ffde05'}, // Bright Yellow
+  {name: '4', labelColor: '#F7EA48', activeBarColor: '#d3db3f'}, // Yellow
+  {name: '5', labelColor: '#FCE300', activeBarColor: '#fcec05'}, // Bright Yellow
   {name: '6', labelColor: '#FFC100', activeBarColor: '#FFC100'}, // Orange-Yellow
-  {name: '7', labelColor: '#FCA514', activeBarColor: '#FCA514'}, // Orange
-  {name: '8', labelColor: '#FF8200', activeBarColor: '#FF8200'}, // Deep Orange
+  {name: '7', labelColor: '#FCA514', activeBarColor: '#eb9d15'}, // Orange
+  {name: '8', labelColor: '#FF8200', activeBarColor: '#f07c00'}, // Deep Orange
   {name: '9', labelColor: '#EF3340', activeBarColor: '#EF3340'}, // Bright Red
   {name: '10', labelColor: '#7b1a1a', activeBarColor: '#7b1a1a'}, // Dark Red
 ];
-
-const getUVSwitchResult = (uvValue: number) => {
+type switchReturnTypes = {
+  conditionText: string;
+  gaugeChartValue: number;
+  spfRecommendation: string;
+  minutesToBurn: string;
+  switchWarningMessage: {text: string[]; icons: string[]};
+  labels: labelTypes[];
+  minutesStyle: {color: string};
+};
+const getUVSwitchResult = (uvValue: number): switchReturnTypes => {
   let conditionText = 'No Data';
   let gaugeChartValue = 1;
-  let spfRecommendation = 'N/A';
-  let minutesToBurn = 'N/A';
+  let spfRecommendation = '';
+  let minutesToBurn = '';
   let switchWarningMessage = precautionMessages.noData;
+  let minutesStyle = minutesStyles.noData;
 
   switch (uvValue) {
     case 1:
@@ -57,6 +93,7 @@ const getUVSwitchResult = (uvValue: number) => {
       spfRecommendation = '15';
       minutesToBurn = '60';
       switchWarningMessage = precautionMessages.low;
+      minutesStyle = minutesStyles.low;
       break;
     case 2:
       conditionText = 'Low';
@@ -64,13 +101,15 @@ const getUVSwitchResult = (uvValue: number) => {
       spfRecommendation = '15';
       minutesToBurn = '60';
       switchWarningMessage = precautionMessages.low;
+      minutesStyle = minutesStyles.low;
       break;
     case 3:
       conditionText = 'Low';
       gaugeChartValue = 3;
       spfRecommendation = '30+';
-      minutesToBurn = '45';
+      minutesToBurn = '50';
       switchWarningMessage = precautionMessages.low;
+      minutesStyle = minutesStyles.low;
       break;
     case 4:
       conditionText = 'Moderate';
@@ -78,6 +117,7 @@ const getUVSwitchResult = (uvValue: number) => {
       spfRecommendation = '30+';
       minutesToBurn = '45';
       switchWarningMessage = precautionMessages.moderate;
+      minutesStyle = minutesStyles.moderate;
       break;
     case 5:
       conditionText = 'Moderate';
@@ -85,6 +125,7 @@ const getUVSwitchResult = (uvValue: number) => {
       spfRecommendation = '30+';
       minutesToBurn = '45';
       switchWarningMessage = precautionMessages.moderate;
+      minutesStyle = minutesStyles.moderate;
       break;
     case 6:
       conditionText = 'High';
@@ -92,6 +133,7 @@ const getUVSwitchResult = (uvValue: number) => {
       spfRecommendation = '50';
       minutesToBurn = '30';
       switchWarningMessage = precautionMessages.high;
+      minutesStyle = minutesStyles.high;
       break;
     case 7:
       conditionText = 'High';
@@ -99,6 +141,7 @@ const getUVSwitchResult = (uvValue: number) => {
       spfRecommendation = '50';
       minutesToBurn = '30';
       switchWarningMessage = precautionMessages.high;
+      minutesStyle = minutesStyles.high;
       break;
     case 8:
       conditionText = 'Very High';
@@ -106,6 +149,7 @@ const getUVSwitchResult = (uvValue: number) => {
       spfRecommendation = '50';
       minutesToBurn = '15';
       switchWarningMessage = precautionMessages.veryHigh;
+      minutesStyle = minutesStyles.veryHigh;
       break;
     case 9:
       conditionText = 'Very High';
@@ -113,6 +157,7 @@ const getUVSwitchResult = (uvValue: number) => {
       spfRecommendation = '50';
       minutesToBurn = '15';
       switchWarningMessage = precautionMessages.veryHigh;
+      minutesStyle = minutesStyles.veryHigh;
       break;
     case 10:
       conditionText = 'Extreme!';
@@ -120,6 +165,8 @@ const getUVSwitchResult = (uvValue: number) => {
       spfRecommendation = '50+';
       minutesToBurn = '10';
       switchWarningMessage = precautionMessages.extreme;
+      minutesStyle = minutesStyles.extreme;
+
       break;
   }
 
@@ -130,6 +177,7 @@ const getUVSwitchResult = (uvValue: number) => {
     minutesToBurn,
     labels,
     switchWarningMessage,
+    minutesStyle,
   };
 };
 
@@ -141,57 +189,61 @@ export const UVBox = ({uvValue, sunDuration}: UVBoxProps) => {
     minutesToBurn,
     switchWarningMessage,
     labels,
+    minutesStyle,
   } = getUVSwitchResult(uvValue);
 
   return (
     <View style={styles.container}>
       {/* Left Container */}
+
       <View style={styles.leftContainer}>
-        {/* Speedometer */}
         <Text style={styles.uvIndexText}>UV Index</Text>
         <RNSpeedometer
-          value={Math.max(0, gaugeChartValue - 1)}
+          value={gaugeChartValue}
           labels={labels}
           size={130}
+          minValue={1}
           maxValue={10}
           labelWrapperStyle={{display: 'none'}}
           innerCircleStyle={{backgroundColor: 'rgb(48,49,49)'}}
           easeDuration={1500}
         />
-        <Text style={styles.uvValueText}>{gaugeChartValue}</Text>
-        <Text style={styles.riskText}>Risk: {conditionText}</Text>
 
-        {/* Info */}
+        <Text style={styles.uvValueText}>{gaugeChartValue}</Text>
+
+        <View>
+          <Text style={styles.riskText}>Risk:</Text>
+          <Text style={[styles.riskText, minutesStyle]}>{conditionText}</Text>
+        </View>
+
         <View style={styles.infoContainer}>
           <View style={styles.infoRow}>
             <Text style={styles.infoText}>Minutes to Burn:</Text>
-            <Text style={styles.infoNumValues}>{minutesToBurn}</Text>
+            <Text style={[styles.minutesBurnNumber, minutesStyle]}>{minutesToBurn}</Text>
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.infoText}>Suggested SPF:</Text>
-            <Text style={styles.infoNumValues}>{spfRecommendation}</Text>
+            <Text style={styles.spfNumbers}>{spfRecommendation}</Text>
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.infoText}>Total Sun Hours:</Text>
-            <Text style={styles.infoNumValues}>{sunDuration}</Text>
+            <Text style={styles.sunHoursNumber}>{sunDuration}</Text>
           </View>
         </View>
       </View>
 
       {/* Right Container */}
       <View style={styles.rightContainer}>
-        {/* Suggestions */}
         <View style={styles.suggestionContainer}>
           <Text style={styles.protectYourselfText}>
-            Protect yourself if you're going out any longer than {minutesToBurn} minutes:
+            Protect yourself if you're going out any longer than {minutesToBurn} minutes!
           </Text>
           <Text style={styles.protectNeededText}>Protection needed:</Text>
-
-          {/* Icons and Descriptors */}
+          {/* Info */}
           <View style={styles.iconTextContainer}>
             {switchWarningMessage.icons.map((icon, index) => (
               <View key={index} style={styles.iconWithText}>
-                <MaterialCommunityIcons name={icon} size={24} color="black" />
+                <MaterialCommunityIcons name={icon} size={26} color="black" />
                 <Text style={styles.warningText}>{switchWarningMessage.text[index]}</Text>
               </View>
             ))}
@@ -204,12 +256,12 @@ export const UVBox = ({uvValue, sunDuration}: UVBoxProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    gap: 15,
+    gap: 10,
     borderWidth: 5,
     borderRadius: 35,
     borderColor: '#4b5e94',
     flexDirection: 'row',
-    padding: 15,
+    padding: 10,
     backgroundColor: '#4b5e9434',
   },
 
@@ -220,15 +272,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'rgb(48,49,49)',
-    borderRadius: 15,
-    width: 150,
+    borderRadius: 20,
     gap: 5,
   },
 
   rightContainer: {
+    flex: 1,
     backgroundColor: 'rgb(238, 238, 238)',
-    width: 150,
-    borderRadius: 15,
+    borderRadius: 20,
   },
 
   infoContainer: {
@@ -236,14 +287,14 @@ const styles = StyleSheet.create({
   },
 
   infoRow: {
-    gap: 8,
+    gap: 5,
     flexDirection: 'row',
   },
 
   infoText: {
     textAlign: 'left',
     color: 'white',
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 500,
   },
 
@@ -253,19 +304,21 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 5,
     borderRadius: 15,
+    alignItems: 'center',
     gap: 5,
   },
 
   protectYourselfText: {
     color: 'black',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 500,
   },
 
   protectNeededText: {
+    textAlign: 'center',
     color: 'black',
-    fontSize: 14,
-    fontWeight: 400,
+    fontSize: 16,
+    fontWeight: 500,
   },
 
   uvIndexText: {
@@ -277,14 +330,10 @@ const styles = StyleSheet.create({
 
   riskText: {
     textAlign: 'center',
+
     color: 'white',
     fontSize: 25,
     fontWeight: 400,
-  },
-
-  infoNumValues: {
-    fontWeight: 'bold',
-    color: 'rgb(167, 188, 188)',
   },
 
   uvValueText: {
@@ -296,15 +345,27 @@ const styles = StyleSheet.create({
 
   iconTextContainer: {
     flexDirection: 'column',
-    gap: 5,
+    gap: 8,
   },
 
   iconWithText: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    // backgroundColor: 'teal',
-    width: 160, //I cant get this box to shrink. Should I use padding right? Margin?
+  },
+
+  minutesBurnNumber: {
+    fontWeight: 'bold',
+  },
+
+  spfNumbers: {
+    color: 'rgb(0, 177, 253)',
+    fontWeight: 'bold',
+  },
+
+  sunHoursNumber: {
+    color: 'yellow',
+    fontWeight: 'bold',
   },
 
   warningText: {
@@ -317,5 +378,4 @@ const styles = StyleSheet.create({
 type UVBoxProps = {
   uvValue: number;
   sunDuration: number;
-  loadingStatus: any;
 };

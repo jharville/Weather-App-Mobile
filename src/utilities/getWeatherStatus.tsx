@@ -108,11 +108,11 @@ export const getWeatherIcon = (status: WeatherStatuses) => {
     case WeatherStatuses.DrizzlingLightly:
       return <Ionicons name="rainy-outline" size={85} color="grey" />;
     case WeatherStatuses.DrizzlingModerately:
-      return <Ionicons name="rainy" size={80} color="grey" />;
+      return <Ionicons name="rainy" size={80} color="white" />;
     case WeatherStatuses.DrizzlingDense:
       return <Ionicons name="rainy-sharp" size={80} color="grey" />;
     case WeatherStatuses.DrizzlingFreezingLight:
-      return <MaterialCommunityIcons name="weather-snowy-rainy" color="grey" size={88} />;
+      return <MaterialCommunityIcons name="weather-snowy-rainy" color="white" size={88} />;
     case WeatherStatuses.DrizzlingFreezingDense:
       return <MaterialCommunityIcons name="weather-snowy-heavy" color="grey" size={88} />;
     case WeatherStatuses.RainingLight:
