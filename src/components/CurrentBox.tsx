@@ -4,9 +4,13 @@ import {SunPositionTracker} from './SunPositionTracker';
 import {format, parseISO, addMinutes} from 'date-fns';
 import {useEffect, useState} from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {WeatherData} from '../screens/ResultScreen';
 
 export const CurrentBox = ({weatherData, generalWeatherCondition, searchTerm}: CurrentBoxProps) => {
-  const temperature = Math.round(weatherData?.current?.temperature_2m) ?? 'N/A';
+  const temperature =
+    weatherData?.current?.temperature_2m !== undefined
+      ? Math.round(weatherData.current.temperature_2m)
+      : '';
   const humidity = Math.round(weatherData?.current?.relative_humidity_2m ?? 0);
   const windSpeed = Math.round(weatherData?.current?.wind_speed_10m ?? 0);
   const generalWeatherIcon = getWeatherIcon(generalWeatherCondition);
@@ -184,23 +188,7 @@ const styles = StyleSheet.create({
 });
 
 type CurrentBoxProps = {
-  weatherData: WeatherData;
+  weatherData: WeatherData | null;
   searchTerm: string;
   generalWeatherCondition: WeatherStatuses;
-};
-
-type WeatherData = {
-  current: {
-    temperature_2m: number;
-    relative_humidity_2m: number;
-    weather_code: number;
-    wind_speed_10m: number;
-    time: string;
-  };
-  daily: {
-    temperature_2m_max: number[];
-    temperature_2m_min: number[];
-    sunrise: string;
-    sunset: string;
-  };
 };
