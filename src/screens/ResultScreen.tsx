@@ -110,14 +110,6 @@ export const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
                 generalWeatherCondition={generalWeatherCondition}
                 searchTerm={formattedSearchTerm}
               />
-              <ForecastBox
-                generalWeatherCondition={generalWeatherCondition}
-                WeatherCode={weather?.daily?.weather_code}
-                minTemp={weather?.daily?.temperature_2m_min}
-                maxTemp={weather?.daily?.temperature_2m_max}
-                forecastDates={weather?.daily?.time || []}
-                onDaySelect={handleDayClick}
-              />
 
               <SummaryChart
                 loadingStatus={loadingStatus}
@@ -129,11 +121,16 @@ export const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
                 setDayClickedIndex={setDayClickedIndex}
               />
 
-              <UVBox
-                uvValue={formattedUV}
-                sunDuration={formattedSunHours}
-                loadingStatus={undefined}
+              <ForecastBox
+                generalWeatherCondition={generalWeatherCondition}
+                WeatherCode={weather?.daily?.weather_code}
+                minTemp={weather?.daily?.temperature_2m_min}
+                maxTemp={weather?.daily?.temperature_2m_max}
+                forecastDates={weather?.daily?.time || []}
+                onDaySelect={handleDayClick}
               />
+
+              <UVBox uvValue={formattedUV} sunDuration={formattedSunHours} />
             </View>
           )}
         </View>
