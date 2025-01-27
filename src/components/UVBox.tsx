@@ -1,7 +1,8 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import RNSpeedometer from 'react-native-speedometer';
+
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {SemiCircleGauge} from './SemiCircleGauge';
 
 type MinutesStyles = {
   [key: string]: {
@@ -188,7 +189,6 @@ export const UVBox = ({uvValue, sunDuration}: UVBoxProps) => {
     spfRecommendation,
     minutesToBurn,
     switchWarningMessage,
-    labels,
     minutesStyle,
   } = getUVSwitchResult(uvValue);
 
@@ -198,18 +198,8 @@ export const UVBox = ({uvValue, sunDuration}: UVBoxProps) => {
 
       <View style={styles.leftContainer}>
         <Text style={styles.uvIndexText}>UV Index</Text>
-        <RNSpeedometer
-          value={gaugeChartValue}
-          labels={labels}
-          size={130}
-          minValue={1}
-          maxValue={10}
-          labelWrapperStyle={{display: 'none'}}
-          innerCircleStyle={{backgroundColor: 'rgb(48,49,49)'}}
-          easeDuration={1500}
-        />
 
-        <Text style={styles.uvValueText}>{gaugeChartValue}</Text>
+        <SemiCircleGauge segments={10} size={160} needleColor={'white'} value={gaugeChartValue} />
 
         <View>
           <Text style={styles.riskText}>Risk:</Text>
