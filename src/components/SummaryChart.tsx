@@ -321,7 +321,7 @@ export const SummaryChart = ({
                   bezier={false}
                   chartConfig={chartConfig}
                   renderDotContent={({x, y, index}) => (
-                    <>
+                    <React.Fragment key={`dot-${index}`}>
                       {/* Temp Values */}
                       <Text style={[styles.tempValues, {left: x - 16, top: -120}]}>
                         {selectedTempData[index]?.temp}°F
@@ -339,7 +339,7 @@ export const SummaryChart = ({
                           {selectedRainData[index]?.chance}
                         </Text>
                       </View>
-                    </>
+                    </React.Fragment>
                   )}
                 />
               </View>
