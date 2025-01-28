@@ -100,8 +100,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 40,
-    gap: 25,
+    paddingHorizontal: 50,
   },
 
   bottomBox: {
