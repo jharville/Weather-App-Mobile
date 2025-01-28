@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View, Alert} from 'react-native';
 import Mapbox from '@rnmapbox/maps';
 
@@ -9,7 +9,7 @@ Mapbox.setAccessToken(
 export const MapDisplay = ({userSearchedCity}: MapDisplayProps) => {
   const [coordinates, setCoordinates] = useState<[number, number]>([0, 0]);
 
-  const fetchCityCoordinates = async (city: string) => {
+  const fetchCityCoordinates = useCallback(async (city: string) => {
     try {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?q=${city}&format=json&limit=1`,
@@ -30,7 +30,7 @@ export const MapDisplay = ({userSearchedCity}: MapDisplayProps) => {
       Alert.alert('Error', 'Failed to fetch city coordinates.');
       setCoordinates([0, 0]);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (userSearchedCity) {
