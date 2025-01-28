@@ -8,6 +8,7 @@ import {ForecastBox} from '../components/ForecastBox';
 import {getWeatherLabel} from '../utilities/getWeatherStatus';
 import {SummaryChart} from '../components/SummaryChart';
 import {UVBox} from '../components/UVBox';
+import {MapDisplay} from '../components/MapDisplay';
 
 export enum LoadingStatuses {
   Idle = 'Idle',
@@ -110,6 +111,7 @@ export const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
                 generalWeatherCondition={generalWeatherCondition}
                 searchTerm={formattedSearchTerm}
               />
+              <MapDisplay userSearchedCity={searchTerm} />
               <SummaryChart
                 weatherCode={weatherData?.hourly?.weather_code || []}
                 rain={weatherData?.hourly?.precipitation_probability || []}
