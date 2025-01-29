@@ -9,6 +9,11 @@ import {getWeatherLabel} from '../utilities/getWeatherStatus';
 import {SummaryChart} from '../components/SummaryChart';
 import {UVBox} from '../components/UVBox';
 import {MapDisplay} from '../components/MapDisplay';
+import {SearchCity} from '../components/SearchCity';
+import {HeaderBackButton} from '../navigation/HeaderComponents/HeaderBackButton';
+import {FooterSearchIcon} from '../navigation/FooterComponents/FooterSearchIcon';
+import {HeaderSettingsButton} from '../navigation/HeaderComponents/HeaderSettingsButton';
+import {useTheme} from '@react-navigation/native';
 
 export enum LoadingStatuses {
   Idle = 'Idle',
@@ -17,12 +22,31 @@ export enum LoadingStatuses {
   Rejected = 'Rejected',
 }
 
-export const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
+export const ResultScreen = ({route, navigation}: MainStackScreenProps<'ResultScreen'>) => {
   const searchTerm = route.params?.searchTerm ?? '';
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [loadingStatus, setLoadingStatus] = useState<LoadingStatuses>(LoadingStatuses.Idle);
   const [weatherFetchError, setWeatherFetchError] = useState<string | null>(null);
   const [dayClickedIndex, setDayClickedIndex] = useState(0);
+  const [userTextInput, setUserTextInput] = useState('');
+  const [searchVisibility, setSearchVisibility] = useState(false);
+
+  const handleSearch = useCallback(() => {
+    navigation.setParams({
+      searchTerm: userTextInput,
+    });
+    setUserTextInput('');
+  }, [userTextInput]);
+
+  const handleSuggestionSearch = useCallback(
+    (suggestion: string) => {
+      setUserTextInput('');
+      navigation.setParams({
+        searchTerm: suggestion,
+      });
+    },
+    [navigation],
+  );
 
   // #region Weather Fetch Logic
   const fetchWeatherData = async (
@@ -99,11 +123,24 @@ export const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
       <View style={styles.resultBackgroundGradiant}>
         <LinearGradient colorList={gradientColors} angle={90} />
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.mainContainer}>
+
+      {/* Search Bar */}
+      {searchVisibility && (
+        <View style={styles.searchBar}>
+          <SearchCity
+            userTextInput={userTextInput}
+            setUserTextInput={setUserTextInput}
+            handleSearch={handleSearch}
+            handleSuggestionClick={handleSuggestionSearch}
+          />
+        </View>
+      )}
+
+      <View style={styles.mainContainer}>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <Text style={styles.error}>{weatherFetchError}</Text>
           {loadingStatus === LoadingStatuses.Loading ? (
-            <ActivityIndicator size={40} color={'white'} />
+            <ActivityIndicator style={styles.loadingIcon} size={100} color="white" />
           ) : (
             <View style={styles.componentsContainer}>
               <CurrentBox
@@ -132,8 +169,14 @@ export const ResultScreen = ({route}: MainStackScreenProps<'ResultScreen'>) => {
               <UVBox uvValue={formattedUV} sunDuration={formattedSunHours} />
             </View>
           )}
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
+      {/* Footer */}
+      <View style={styles.footer}>
+        <FooterSearchIcon onPressIcon={() => setSearchVisibility(!searchVisibility)} />
+        <HeaderBackButton canGoBack={true} />
+        {/* <HeaderSettingsButton canGoBack={false} /> */}
+      </View>
     </>
   );
 };
@@ -147,17 +190,44 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
 
-  mainContainer: {
+  loadingIcon: {top: 305},
+
+  searchBar: {
     paddingHorizontal: 15,
+    paddingVertical: 10,
+    backgroundColor: '#19204e',
+    borderBottomWidth: 4,
+    borderColor: '#00f8a184',
+  },
+
+  mainContainer: {
+    flex: 1,
     gap: 15,
   },
 
   componentsContainer: {
     gap: 15,
+    paddingBottom: 15,
   },
 
   error: {
     color: 'red',
+    fontSize: 16,
+  },
+
+  footer: {
+    flexDirection: 'row',
+    paddingHorizontal: 120,
+    height: 60,
+    backgroundColor: '#19204e',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderTopWidth: 4,
+    borderColor: '#00f8a184',
+  },
+
+  footerText: {
+    color: 'white',
     fontSize: 16,
   },
 });

@@ -42,7 +42,7 @@ export const MapDisplay = ({userSearchedCity}: MapDisplayProps) => {
     <View style={styles.container}>
       <View style={styles.page}>
         <View style={styles.mapContainer}>
-          <Mapbox.MapView style={styles.map}>
+          <Mapbox.MapView scrollEnabled={false} style={styles.map}>
             <Mapbox.Camera centerCoordinate={coordinates} zoomLevel={userSearchedCity ? 4 : 1} />
             <Mapbox.PointAnnotation
               id="cityMarker"
