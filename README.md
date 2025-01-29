@@ -3,10 +3,14 @@
 A simple Mobile app that displays local weather variables based on search.
 THIS IS A WIP. 
 
+![Screen Shot 2025-01-28 at 7 43 06 PM](https://github.com/user-attachments/assets/8cbca8fb-b337-45ff-8bb1-a1dade26643f)
+![Screen Shot 2025-01-28 at 7 43 28 PM](https://github.com/user-attachments/assets/01c060d3-21b8-4782-953c-e6579d0fb360)
+![Screen Shot 2025-01-28 at 7 43 50 PM](https://github.com/user-attachments/assets/0ec93631-9100-40b6-8744-8174528387b0)
+![Screen Shot 2025-01-28 at 7 44 01 PM](https://github.com/user-attachments/assets/89b8fd59-bf75-46c6-9a54-3428687d5745)
 
-![Screen Shot 2025-01-14 at 11 50 14 AM](https://github.com/user-attachments/assets/d9769670-cacb-4331-9a98-5122770f9cbc)
-![Screen Shot 2025-01-14 at 11 50 45 AM](https://github.com/user-attachments/assets/f0bbe363-58e4-464f-8845-ceae10246691)
-![Screen Shot 2025-01-14 at 11 51 16 AM](https://github.com/user-attachments/assets/eae346d1-056e-47c7-b4da-8df547934518)
+
+
+
 
 ## Initial Setup :
 - First, clone the repo.
