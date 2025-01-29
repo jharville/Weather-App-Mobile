@@ -73,7 +73,6 @@ const styles = StyleSheet.create({
   },
 
   appTitleAndSearch: {
-    // backgroundColor: 'teal',
     gap: 15,
   },
 

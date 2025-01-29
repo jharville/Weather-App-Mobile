@@ -1,16 +1,17 @@
+import React, {useState} from 'react';
+import {View, StyleSheet} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {ResultScreen} from '../screens/ResultScreen';
 import {MainStackParamList} from './types/navigation.types';
 import {NativeStackNavigationOptions} from '@react-navigation/native-stack';
-import {HeaderBackButton} from './HeaderComponents/HeaderBackButton';
-import {HeaderSettingsButton} from './HeaderComponents/HeaderSettingsButton';
 
 const Stack = createNativeStackNavigator<MainStackParamList>();
 
 const resultScreenOptions: NativeStackNavigationOptions = {
-  headerLeft: HeaderBackButton,
+  headerShown: false,
+  // headerLeft: HeaderBackButton,
   headerTitle: '',
-  headerRight: HeaderSettingsButton,
+  // headerRight: HeaderSettingsButton,
   headerBackVisible: false,
   headerShadowVisible: false,
   headerStyle: {
@@ -20,10 +21,27 @@ const resultScreenOptions: NativeStackNavigationOptions = {
   headerTitleAlign: 'center',
 };
 
-export const MainStack = ({}) => {
+export const MainStack = () => {
   return (
-    <Stack.Navigator screenOptions={resultScreenOptions}>
-      <Stack.Screen name="ResultScreen" component={ResultScreen} options={resultScreenOptions} />
-    </Stack.Navigator>
+    <View style={styles.container}>
+      <View style={styles.stackContainer}>
+        <Stack.Navigator screenOptions={resultScreenOptions}>
+          <Stack.Screen
+            name="ResultScreen"
+            component={ResultScreen}
+            options={resultScreenOptions}
+          />
+        </Stack.Navigator>
+      </View>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  stackContainer: {
+    flex: 1,
+  },
+});

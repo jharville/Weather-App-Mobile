@@ -92,6 +92,8 @@ export const CustomAddressAutofill: React.FC<CustomAddressAutofillProps> = ({
 
 const styles = StyleSheet.create({
   resultContainer: {
+    position: 'absolute',
+    top: 65,
     borderWidth: 4,
     borderColor: '#00f0f8',
     borderRadius: 8,
@@ -99,6 +101,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     color: 'white',
     fontFamily: 'Roboto',
+    zIndex: 99,
   },
 
   resultListItem: {
