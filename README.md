@@ -12,7 +12,7 @@ THIS IS A WIP.
 
 
 
-## Initial Setup :
+## 📦 Installation:
 - First, clone the repo.
 - Then run `npm install` (instructions for installing npm can be found [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) if you dont already have it)
 
