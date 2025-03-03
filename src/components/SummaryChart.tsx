@@ -4,7 +4,7 @@ import {
   View,
   ScrollView,
   useWindowDimensions,
-  ActivityIndicator,
+  LayoutChangeEvent,
 } from 'react-native';
 import {useCallback, useMemo, useRef, useState} from 'react';
 import {format, parseISO} from 'date-fns';
@@ -15,6 +15,7 @@ import {LineChart} from 'react-native-chart-kit';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome6';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import {PressableScaleButton} from './PressableScaleButton.tsx';
+import {isIOS} from '../constants.ts';
 
 const buttonOptions = {
   summary: 'Summary',
@@ -260,6 +261,15 @@ export const SummaryChart = ({
 
   const MemoizedPressableScaleButton = React.memo(PressableScaleButton);
 
+  const [chartHeight, setChartHeight] = useState<number | undefined>(undefined);
+
+  const onChartLayout = (event: LayoutChangeEvent) => {
+    const {height} = event.nativeEvent.layout;
+    if (height > 0) {
+      setChartHeight(height);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.summaryAndToggle}>
@@ -302,7 +312,7 @@ export const SummaryChart = ({
         <View style={styles.chartBorder}>
           <ScrollView horizontal ref={scrollViewRef} showsHorizontalScrollIndicator={false}>
             <View style={{width: tempChartWidth}}>
-              <View style={styles.tempChartContainer}>
+              <View style={styles.tempChartContainer} onLayout={onChartLayout}>
                 <LineChart
                   data={{
                     labels: selectedTempData.map(item => item.time),
@@ -323,18 +333,18 @@ export const SummaryChart = ({
                   renderDotContent={({x, y, index}) => (
                     <React.Fragment key={`dot-${index}`}>
                       {/* Temp Values */}
-                      <Text style={[styles.tempValues, {left: x - 16, top: -120}]}>
+                      <Text style={[styles.tempValues, {left: x - 16, top: isIOS ? 95 : -120}]}>
                         {selectedTempData[index]?.temp}°F
                       </Text>
 
                       {/* Icons */}
-                      <View style={[styles.iconContainer, {left: x - 38, top: -190}]}>
+                      <View style={[styles.iconContainer, {left: x - 38, top: isIOS ? 20 : -190}]}>
                         {selectedIconsData[index]?.icon}
                       </View>
 
                       {/* Rain Values */}
                       <View>
-                        <Text style={[styles.rainValues, {left: x - 18, top: -30}]}>
+                        <Text style={[styles.rainValues, {left: x - 18, top: isIOS ? 185 : -30}]}>
                           <FontAwesomeIcon name="droplet" size={12} color="white" />{' '}
                           {selectedRainData[index]?.chance}
                         </Text>

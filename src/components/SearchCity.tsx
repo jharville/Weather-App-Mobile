@@ -42,7 +42,10 @@ export const SearchCity: React.FC<SearchCityProps> = ({
                 placeholderTextColor="rgba(255, 255, 255, 0.7)"
                 numberOfLines={1}
                 onSubmitEditing={handleSearch}
-                cursorColor="white"
+                cursorColor={'#0ff'}
+                selectionColor={'#0ff'}
+                // cursorColor is Android only
+                // selectionColor is IOS only
               />
             </View>
             <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>

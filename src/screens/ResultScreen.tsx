@@ -14,6 +14,7 @@ import {HeaderBackButton} from '../navigation/HeaderComponents/HeaderBackButton'
 import {FooterSearchIcon} from '../navigation/FooterComponents/FooterSearchIcon';
 import {HeaderSettingsButton} from '../navigation/HeaderComponents/HeaderSettingsButton';
 import {useTheme} from '@react-navigation/native';
+import {isIOS} from '../constants.ts';
 
 export enum LoadingStatuses {
   Idle = 'Idle',
