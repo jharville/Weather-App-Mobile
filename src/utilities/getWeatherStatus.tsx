@@ -5,6 +5,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {LandingScreen} from '../screens/LandingScreen';
 
 /**
  * Stored in getWeatherStatus file.
@@ -145,11 +146,16 @@ export const getWeatherIcon = (status: WeatherStatuses) => {
       return <MaterialCommunityIcons name="weather-lightning-rainy" color="grey" size={90} />;
     case WeatherStatuses.ThunderstormsHeavyHail:
       return <MaterialCommunityIcons name="weather-lightning-heavy" color="grey" size={90} />;
+
+    case WeatherStatuses.SnowShowersLight:
+      return <MaterialCommunityIcons name="weather-snowy" color="white" size={82} />;
+
+    case WeatherStatuses.SnowShowersHeavy:
+      return <MaterialCommunityIcons name="weather-snowy" color="grey" size={82} />;
     default:
       return (
         <View>
           <Text style={{color: 'white'}}>Default Returned</Text>
-          {/* <FontAwesome6 name="sun" color="goldenrod" size={70} /> */}
         </View>
       );
   }

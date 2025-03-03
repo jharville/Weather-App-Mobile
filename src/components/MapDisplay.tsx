@@ -44,13 +44,15 @@ export const MapDisplay = ({userSearchedCity}: MapDisplayProps) => {
         <View style={styles.mapContainer}>
           <Mapbox.MapView scrollEnabled={false} style={styles.map}>
             <Mapbox.Camera centerCoordinate={coordinates} zoomLevel={userSearchedCity ? 4 : 1} />
-            <Mapbox.PointAnnotation
-              id="cityMarker"
-              coordinate={coordinates}
-              title={userSearchedCity}>
-              {/* Child element for the PointAnnotation */}
-              <View />
-            </Mapbox.PointAnnotation>
+            {coordinates && (
+              <Mapbox.PointAnnotation
+                id="cityMarker"
+                coordinate={coordinates}
+                title={userSearchedCity}>
+                <View />
+                {/* The View is the required Child element for the PointAnnotation */}
+              </Mapbox.PointAnnotation>
+            )}
           </Mapbox.MapView>
         </View>
       </View>

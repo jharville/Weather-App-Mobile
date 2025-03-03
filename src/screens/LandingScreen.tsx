@@ -59,7 +59,7 @@ export const LandingScreen = ({navigation}: LandingStackScreenProps<'LandingScre
 const styles = StyleSheet.create({
   wholeScreen: {
     flex: 1,
-    paddingTop: 50,
+    paddingTop: 250,
     paddingHorizontal: 40,
   },
   videoLanding: {
