@@ -47,7 +47,11 @@ yarn android
 ### For iOS (Coming Soon!) 
 
 ```bash
-Support is not available for ios at the moment, but it is actively being worked on.
+# using npm
+npm run ios
+
+# OR using Yarn
+yarn ios
 ```
 
 Enjoy!
