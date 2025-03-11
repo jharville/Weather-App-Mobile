@@ -12,8 +12,6 @@ import {MapDisplay} from '../components/MapDisplay';
 import {SearchCity} from '../components/SearchCity';
 import {HeaderBackButton} from '../navigation/HeaderComponents/HeaderBackButton';
 import {FooterSearchIcon} from '../navigation/FooterComponents/FooterSearchIcon';
-import {HeaderSettingsButton} from '../navigation/HeaderComponents/HeaderSettingsButton';
-import {useTheme} from '@react-navigation/native';
 import {isIOS} from '../constants.ts';
 
 export enum LoadingStatuses {
@@ -71,13 +69,13 @@ export const ResultScreen = ({route, navigation}: MainStackScreenProps<'ResultSc
 
       const {lat, lon} = geoData[0];
 
-      // Fetch weather data
       const weatherResponse = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,showers,snowfall,weather_code,cloud_cover,pressure_msl,surface_pressure,wind_speed_10m,wind_direction_10m,wind_gusts_10m&hourly=temperature_2m,relative_humidity_2m,dew_point_2m,apparent_temperature,precipitation_probability,precipitation,rain,showers,snowfall,snow_depth,weather_code,pressure_msl,surface_pressure,cloud_cover,cloud_cover_low,cloud_cover_mid,cloud_cover_high,visibility,evapotranspiration,et0_fao_evapotranspiration,vapour_pressure_deficit,wind_speed_10m,wind_speed_80m,wind_speed_120m,wind_speed_180m,wind_direction_10m,wind_direction_80m,wind_direction_120m,wind_direction_180m,wind_gusts_10m,temperature_80m,temperature_120m,temperature_180m&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,sunrise,sunset,daylight_duration,sunshine_duration,uv_index_max,uv_index_clear_sky_max,precipitation_sum,rain_sum,showers_sum,snowfall_sum,precipitation_hours,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant,shortwave_radiation_sum,et0_fao_evapotranspiration&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&forecast_days=14&timezone=auto&timestamp=${Date.now()}`,
+        // Fetch from WeatherApp_Backend
+        `https://weatherapp-backend-188594537255.us-central1.run.app/api/getOpenMeteoWeather?lat=${lat}&lon=${lon}`,
       );
-      const weatherData = await weatherResponse.json();
 
-      setWeatherData(weatherData);
+      const weatherData = await weatherResponse.json();
+      setWeatherData(weatherData.data);
       setLoadingStatus(LoadingStatuses.Fulfilled);
     } catch (error: any) {
       setWeatherData(null);
@@ -125,59 +123,67 @@ export const ResultScreen = ({route, navigation}: MainStackScreenProps<'ResultSc
         <LinearGradient colorList={gradientColors} angle={90} />
       </View>
 
-      {/* Search Bar */}
-      {searchVisibility && (
-        <View style={styles.searchBar}>
-          <SearchCity
-            userTextInput={userTextInput}
-            setUserTextInput={setUserTextInput}
-            handleSearch={handleSearch}
-            handleSuggestionClick={handleSuggestionSearch}
-          />
-        </View>
-      )}
-
-      <View style={styles.mainContainer}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Text style={styles.error}>{weatherFetchError}</Text>
-          {loadingStatus === LoadingStatuses.Loading ? (
-            <ActivityIndicator style={styles.loadingIcon} size={100} color="white" />
-          ) : (
-            <View style={styles.componentsContainer}>
-              <CurrentBox
-                weatherData={weatherData}
-                generalWeatherCondition={generalWeatherCondition}
-                searchTerm={formattedSearchTerm}
+      {/* Loading Icon */}
+      {loadingStatus === LoadingStatuses.Loading ? (
+        <>
+          <View style={styles.loadingIconsContainer}>
+            <Text style={styles.error}>{weatherFetchError}</Text>
+            <Text style={styles.loadingText}>Beep Boop Beep...</Text>
+            <ActivityIndicator color="white" size={isIOS ? 'large' : 50} />
+          </View>
+        </>
+      ) : (
+        <>
+          {/* Search Bar */}
+          {searchVisibility && (
+            <View style={styles.searchBar}>
+              <SearchCity
+                userTextInput={userTextInput}
+                setUserTextInput={setUserTextInput}
+                handleSearch={handleSearch}
+                handleSuggestionClick={handleSuggestionSearch}
               />
-              <MapDisplay userSearchedCity={searchTerm} />
-              <SummaryChart
-                weatherCode={weatherData?.hourly?.weather_code || []}
-                rain={weatherData?.hourly?.precipitation_probability || []}
-                temps={weatherData?.hourly?.temperature_2m || []}
-                forecastDate={weatherData?.daily?.time || []}
-                dayClickedIndex={dayClickedIndex}
-                setDayClickedIndex={setDayClickedIndex}
-              />
-              <ForecastBox
-                generalWeatherCondition={generalWeatherCondition}
-                WeatherCode={weatherData?.daily?.weather_code || []}
-                minTemp={weatherData?.daily?.temperature_2m_min || []}
-                maxTemp={weatherData?.daily?.temperature_2m_max || []}
-                forecastDates={weatherData?.daily?.time || []}
-                onDaySelect={handleDayClick}
-              />
-
-              <UVBox uvValue={formattedUV} sunDuration={formattedSunHours} />
             </View>
           )}
-        </ScrollView>
-      </View>
-      {/* Footer */}
-      <View style={styles.footer}>
-        <FooterSearchIcon onPressIcon={() => setSearchVisibility(!searchVisibility)} />
-        <HeaderBackButton canGoBack={true} />
-        {/* <HeaderSettingsButton canGoBack={false} /> */}
-      </View>
+
+          <View style={styles.mainContainer}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View style={styles.componentsContainer}>
+                <CurrentBox
+                  weatherData={weatherData}
+                  generalWeatherCondition={generalWeatherCondition}
+                  searchTerm={formattedSearchTerm}
+                />
+                <MapDisplay userSearchedCity={searchTerm} />
+                <SummaryChart
+                  weatherCode={weatherData?.hourly?.weather_code || []}
+                  rain={weatherData?.hourly?.precipitation_probability || []}
+                  temps={weatherData?.hourly?.temperature_2m || []}
+                  forecastDate={weatherData?.daily?.time || []}
+                  dayClickedIndex={dayClickedIndex}
+                  setDayClickedIndex={setDayClickedIndex}
+                />
+                <ForecastBox
+                  generalWeatherCondition={generalWeatherCondition}
+                  WeatherCode={weatherData?.daily?.weather_code || []}
+                  minTemp={weatherData?.daily?.temperature_2m_min || []}
+                  maxTemp={weatherData?.daily?.temperature_2m_max || []}
+                  forecastDates={weatherData?.daily?.time || []}
+                  onDaySelect={handleDayClick}
+                />
+
+                <UVBox uvValue={formattedUV} sunDuration={formattedSunHours} />
+              </View>
+            </ScrollView>
+          </View>
+
+          {/* Footer */}
+          <View style={isIOS ? styles.IOSfooter : styles.androidFooter}>
+            <FooterSearchIcon onPressIcon={() => setSearchVisibility(!searchVisibility)} />
+            <HeaderBackButton canGoBack={true} />
+          </View>
+        </>
+      )}
     </>
   );
 };
@@ -191,7 +197,17 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
 
-  loadingIcon: {top: 305},
+  loadingIconsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    gap: 15,
+  },
+  loadingText: {
+    color: 'white',
+    fontSize: 30,
+  },
 
   searchBar: {
     paddingHorizontal: 15,
@@ -216,15 +232,23 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
-  footer: {
+  IOSfooter: {
+    flexDirection: 'row',
+    paddingHorizontal: 120,
+    paddingBottom: 15,
+    height: 80,
+    backgroundColor: '#1e2c56',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  androidFooter: {
     flexDirection: 'row',
     paddingHorizontal: 120,
     height: 60,
-    backgroundColor: '#19204e',
+    backgroundColor: '#1e2c56',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderTopWidth: 4,
-    borderColor: '#00f8a184',
   },
 
   footerText: {

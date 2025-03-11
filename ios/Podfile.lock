@@ -1741,6 +1741,27 @@ PODS:
     - ReactCommon/turbomodule/core
     - Turf
     - Yoga
+  - RNPermissions (5.2.6):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RNReanimated (3.17.1):
     - DoubleConversion
     - glog
@@ -2045,6 +2066,7 @@ DEPENDENCIES:
   - "RNFlashList (from `../node_modules/@shopify/flash-list`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "rnmapbox-maps (from `../node_modules/@rnmapbox/maps`)"
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -2200,6 +2222,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   rnmapbox-maps:
     :path: "../node_modules/@rnmapbox/maps"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -2285,6 +2309,7 @@ SPEC CHECKSUMS:
   RNFlashList: c989a55fd69b28ca158551cdf2d885348d50e154
   RNGestureHandler: 6aedf747478f64fbeddb3ad5d5d0dfdf2361d136
   rnmapbox-maps: 30f2cd89187f716c6c7ed6d765debaf5e60c3b4c
+  RNPermissions: 4c819af7bcaff637c56c5081ce00b1043b2da819
   RNReanimated: d3b6cc70edd33d2d204c6fed3b8d16c6bf6a091c
   RNScreens: 2629b92a0f38e7432677bee3bc08a352ac5b4279
   RNSVG: 588c85abb474f7ee58dd886ed1fe198cc73772b2
@@ -2293,6 +2318,6 @@ SPEC CHECKSUMS:
   Turf: aa2ede4298009639d10db36aba1a7ebaad072a5e
   Yoga: 3deb2471faa9916c8a82dda2a22d3fba2620ad37
 
-PODFILE CHECKSUM: c03f9faff7ca6b2cad515557f8407541336bfe43
+PODFILE CHECKSUM: 4a7b65b77fed64c0f0d28d9007152ca489bc7ad8
 
 COCOAPODS: 1.16.2

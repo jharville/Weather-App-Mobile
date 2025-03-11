@@ -10,7 +10,8 @@ export const CurrentBox = ({weatherData, generalWeatherCondition, searchTerm}: C
   const temperature =
     weatherData?.current?.temperature_2m !== undefined
       ? Math.round(weatherData.current.temperature_2m)
-      : '';
+      : undefined;
+
   const humidity = Math.round(weatherData?.current?.relative_humidity_2m ?? 0);
   const windSpeed = Math.round(weatherData?.current?.wind_speed_10m ?? 0);
   const generalWeatherIcon = getWeatherIcon(generalWeatherCondition);
@@ -19,7 +20,7 @@ export const CurrentBox = ({weatherData, generalWeatherCondition, searchTerm}: C
   const rawTime = weatherData?.current?.time;
 
   // used to increment the time by 1 minute every 60 seconds even though
-  // current time pulled from OpenMateo isn't frequently updated.
+  // current time pulled from OpenMeteo isn't frequently updated.
   useEffect(() => {
     if (rawTime) {
       const initialTime = parseISO(rawTime);

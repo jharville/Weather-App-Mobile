@@ -1,6 +1,8 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View, Alert} from 'react-native';
 import Mapbox from '@rnmapbox/maps';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {isIOS} from '../constants.ts';
 
 Mapbox.setAccessToken(
   'pk.eyJ1Ijoiam9zZXBoaGFydmlsbGU5NiIsImEiOiJjbTBiZnd1OHEwM2VlMnJvdGE4eDdhZWJjIn0.f5ixUJf5mXnHZzIl0rft6Q',
@@ -42,14 +44,16 @@ export const MapDisplay = ({userSearchedCity}: MapDisplayProps) => {
     <View style={styles.container}>
       <View style={styles.page}>
         <View style={styles.mapContainer}>
-          <Mapbox.MapView scrollEnabled={false} style={styles.map}>
+          <Mapbox.MapView scrollEnabled={isIOS ? true : false} style={styles.map}>
             <Mapbox.Camera centerCoordinate={coordinates} zoomLevel={userSearchedCity ? 4 : 1} />
             {coordinates && (
               <Mapbox.PointAnnotation
                 id="cityMarker"
                 coordinate={coordinates}
                 title={userSearchedCity}>
-                <View />
+                <View>
+                  <FontAwesome5 name="map-marker-alt" size={30} color="#FF0000" />
+                </View>
                 {/* The View is the required Child element for the PointAnnotation */}
               </Mapbox.PointAnnotation>
             )}

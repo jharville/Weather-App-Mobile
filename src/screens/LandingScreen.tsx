@@ -29,7 +29,7 @@ export const LandingScreen = ({navigation}: LandingStackScreenProps<'LandingScre
   );
 
   return (
-    <Pressable onPress={Keyboard.dismiss} style={styles.wholeScreen}>
+    <>
       <Video
         source={require('../assets/Weather_App_Background_Video_Compressed.mp4')}
         style={styles.videoLanding}
@@ -39,27 +39,29 @@ export const LandingScreen = ({navigation}: LandingStackScreenProps<'LandingScre
         playInBackground={false}
       />
 
-      <View style={styles.appTitleAndSearch}>
-        <View>
-          <Text style={styles.appTitle}>Weather</Text>
-          <Text style={styles.appTitle}>App</Text>
-        </View>
+      <Pressable onPress={Keyboard.dismiss} style={styles.wholeScreen}>
+        <View style={styles.appTitleAndSearch}>
+          <View>
+            <Text style={styles.appTitle}>Weather</Text>
+            <Text style={styles.appTitle}>App</Text>
+          </View>
 
-        <SearchCity
-          handleSearch={handleSearch}
-          handleSuggestionClick={handleSuggestionClick}
-          userTextInput={userTextInput}
-          setUserTextInput={setUserTextInput}
-        />
-      </View>
-    </Pressable>
+          <SearchCity
+            handleSearch={handleSearch}
+            handleSuggestionClick={handleSuggestionClick}
+            userTextInput={userTextInput}
+            setUserTextInput={setUserTextInput}
+          />
+        </View>
+      </Pressable>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   wholeScreen: {
     flex: 1,
-    paddingTop: 250,
+    paddingTop: 150,
     paddingHorizontal: 40,
   },
   videoLanding: {

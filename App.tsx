@@ -6,7 +6,7 @@ import {SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 const App: React.FC = () => {
   return (
     <>
-      <StatusBar barStyle="dark-content" backgroundColor="#5a5d68" />
+      <StatusBar barStyle="light-content" backgroundColor="#0d0d0d" />
       {/* for Android ^ */}
 
       <SafeAreaView style={styles.safeAreaTop} />
@@ -22,7 +22,7 @@ export default App;
 
 const styles = StyleSheet.create({
   safeAreaTop: {
-    backgroundColor: '#5a5d68',
+    backgroundColor: '#000000',
     //for IOS ^
   },
 });

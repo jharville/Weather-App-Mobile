@@ -111,6 +111,8 @@ export const ForecastBox = ({
         scrollEnabled={false}
         data={forecastDates.slice(0, selectedDaySpanOption)}
         renderItem={renderForecastItem}
+        removeClippedSubviews={false} // Added This as a temporary fix for "cannot remove child at index X" error.
+        // See https://github.com/software-mansion/react-native-screens/issues/2339
       />
     </View>
   );
