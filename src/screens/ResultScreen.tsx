@@ -212,9 +212,7 @@ const styles = StyleSheet.create({
   searchBar: {
     paddingHorizontal: 15,
     paddingVertical: 10,
-    backgroundColor: '#19204e',
-    borderBottomWidth: 4,
-    borderColor: '#00f8a184',
+    backgroundColor: '#2a2e4a',
   },
 
   mainContainer: {
@@ -225,6 +223,7 @@ const styles = StyleSheet.create({
   componentsContainer: {
     gap: 15,
     paddingBottom: 15,
+    paddingTop: 15,
   },
 
   error: {
